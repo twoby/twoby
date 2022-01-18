@@ -1,6 +1,6 @@
 # Two-separated binary
 
-Caution: in alpha. Import `encode` and `decode`. Convert a typed array to/from "Two Separated Binary".
+Caution: in alpha. Import `encode` and `decode`. Convert a typed array to/from "two-separated binary".
 
 Supported binary formats:
 
