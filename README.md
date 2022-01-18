@@ -1,4 +1,4 @@
-# Two Separated Binary
+# Two-separated binary
 
 Caution: in alpha. Import `encode` and `decode`. Convert a typed array to/from "Two Separated Binary".
 
