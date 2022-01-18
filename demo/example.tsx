@@ -3,7 +3,7 @@ import { getProps } from "./exampleProps";
 import styles from "./example.module.css";
 import {
   useParams,
-  BrowserRouter,
+  HashRouter,
   Routes,
   Route,
   Link,
@@ -77,7 +77,7 @@ const Example = ({ inputs }: Props) => {
 
   const twoby_link = <a href="https://github.com/twoby/twoby">Twoby</a>;
   return (
-    <BrowserRouter history={history}>
+    <HashRouter history={history}>
       <h2>{twoby_link} (two-separated binary)</h2>
       <div>
         <Routes>
@@ -99,7 +99,7 @@ const Example = ({ inputs }: Props) => {
           );
         })}
       </div>
-    </BrowserRouter>
+    </HashRouter>
   );
 };
 
