@@ -1,0 +1,48 @@
+{
+  "name": "twoby",
+  "version": "1.0.0-alpha.1",
+  "description": "Two-separated binary",
+  "license": "MPL-2.0",
+  "scripts": {
+    "lint": "eslint src",
+    "build": "rm -rf build && tsc -b",
+    "format": "prettier --ignore-path .eslintignore --write .",
+    "test": "uvu -r tsm -r esm tests",
+    "demo": "vite serve demo --host"
+  },
+  "type": "module",
+  "main": "build/index.js",
+  "types": "build/index.d.ts",
+  "author": "John T. Hoffer",
+  "repository": "github:twoby/twoby",
+  "exports": {
+    ".": "./build/index.js"
+  },
+  "files": [
+    "build"
+  ],
+  "keywords": [
+    "compression",
+    "encoding",
+    "generic",
+    "integer"
+  ],
+  "devDependencies": {
+    "@babel/core": "^7.16.7",
+    "@babel/preset-react": "^7.16.7",
+    "@babel/register": "^7.16.8",
+    "@typescript-eslint/eslint-plugin": "^5.9.1",
+    "@typescript-eslint/parser": "^5.9.1",
+    "@vitejs/plugin-react": "^1.1.4",
+    "eslint": "^8.6.0",
+    "esm": "^3.2.25",
+    "prettier": "^2.5.1",
+    "react": "^18.0.0-rc.0",
+    "react-dom": "^18.0.0-rc.0",
+    "react-router-dom": "^6.2.1",
+    "tsm": "^2.2.1",
+    "typescript": "^4.5.4",
+    "uvu": "^0.5.3",
+    "vite": "^2.8.0-beta.1"
+  }
+}
