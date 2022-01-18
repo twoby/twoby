@@ -7,9 +7,7 @@ export type Props = {
 };
 
 const getAllProps = () => {
-  const optionList: OptionsTuple[] = ([
-    ["default", {}],
-  ]);
+  const optionList: OptionsTuple[] = [["default", {}]];
   return new Map<string, Props>(
     optionList.map(([key, options]) => {
       return [key, { options }];
@@ -21,6 +19,4 @@ const getProps: GetProps = (key: string) => {
   return getAllProps().get(key);
 };
 
-export {
-  getProps
-}
+export { getProps };

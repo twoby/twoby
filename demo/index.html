@@ -17,21 +17,21 @@
       const root = createRoot(findIndex(document));
       const inputs = [
         [],
-        ...[...Array(27).keys()].map(v => {
+        ...[...Array(27).keys()].map((v) => {
           const tern_str = (2 ** v).toString(3).split("");
-          return tern_str.map(n => 2 ** parseInt(n));
-        })
+          return tern_str.map((n) => 2 ** parseInt(n));
+        }),
       ];
 
-      const propList = [ 
-        getProps("default")
-      ];
-      root.render(createElement("div", null, [
-        ...propList.map((props, key) => {
-          const exampleProps = { ...props, inputs, key };
-          return createElement(Example, exampleProps);
-        })
-      ]));
+      const propList = [getProps("default")];
+      root.render(
+        createElement("div", null, [
+          ...propList.map((props, key) => {
+            const exampleProps = { ...props, inputs, key };
+            return createElement(Example, exampleProps);
+          }),
+        ])
+      );
     </script>
   </body>
 </html>

@@ -16,7 +16,6 @@ pnpm add twoby
 
 Or, run `npm install` or `yarn add`, based on your preference.
 
-
 ## Contributing
 
 The published copy lives [on GitHub][gh_twoby]. Make any pull request against the main branch.

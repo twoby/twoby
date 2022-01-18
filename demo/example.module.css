@@ -1,5 +1,5 @@
 .options {
-  grid-template-columns: repeat(auto-fit, 6.66em); 
+  grid-template-columns: repeat(auto-fit, 6.66em);
   grid-auto-rows: auto;
   font-size: 1.2em;
   display: grid;
@@ -16,16 +16,16 @@
 }
 .worse {
   padding: 0.333em;
-  background-color: rgb(207,204,229);
+  background-color: rgb(207, 204, 229);
 }
 
 .better {
   padding: 0.333em;
-  background-color: rgb(254,224,182);
+  background-color: rgb(254, 224, 182);
 }
 
 .result {
-  grid-template-columns: repeat(auto-fit, 3.33em 10em); 
+  grid-template-columns: repeat(auto-fit, 3.33em 10em);
   grid-auto-rows: auto;
   font-size: 1.2em;
   display: grid;
