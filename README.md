@@ -1,6 +1,6 @@
 # Two-separated binary
 
-Caution: in alpha. Import `encode` and `decode`. Convert a typed array to/from "two-separated binary".
+Caution: in alpha. Import `encode` and `decode`. Convert a typed array to/from "two-separated binary". See [demo](demo.twoby.org).
 
 Supported binary formats:
 
@@ -18,7 +18,7 @@ Or, run `npm install` or `yarn add`, based on your preference.
 
 ## Contributing
 
-The published copy lives [on GitHub][gh_twoby]. Make any pull request against the main branch.
+The [published][npm_twoby] copy lives [on GitHub][gh_twoby]. Make any pull request against the main branch.
 
 ### Package manager
 
@@ -26,5 +26,6 @@ I build and test with [pnpm][pnpm]. I've tried `npm`, `yarn@1`, `yarn@berry`, bu
 
 [gh_twoby]: https://github.com/twoby/twoby
 [uvu_use_pnpm]: https://github.com/lukeed/uvu/issues/144#issuecomment-939316208
+[npm_twoby]: https://www.npmjs.com/package/twoby
 [npm_uvu]: https://www.npmjs.com/package/uvu
 [pnpm]: https://pnpm.io
