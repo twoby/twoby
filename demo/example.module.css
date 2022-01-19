@@ -1,38 +1,127 @@
-.options {
-  grid-template-columns: repeat(auto-fit, 6.66em);
-  grid-auto-rows: auto;
-  font-size: 1.2em;
+.examples,
+.main,
+.result,
+.intro,
+.inputWrapper,
+.dropdown {
+  justify-content: space-evenly;
   display: grid;
   gap: 0.333em;
 }
 
-.options > div {
-  text-justify: inter-word;
-  text-align: justify;
+.examples {
+  grid-template-columns: repeat(auto-fit, 5em);
+  grid-auto-rows: auto;
+}
+
+.intro {
+  grid-template-columns: 100%;
+  grid-auto-rows: auto;
+  font-size: 1.2em;
+}
+
+.main {
+  grid-template-rows: 3em auto auto 1fr;
+  grid-template-columns: 100%;
+  font-size: 1.2em;
+}
+
+.inputWrapper {
+  grid-template-columns: 1fr auto;
+  grid-template-rows: auto 3em auto 1fr;
+  grid-row: 1 / 3;
+  grid-column: 1;
+  z-index: 1;
+}
+
+.inputWrapper > label {
+  grid-column: 1;
+  grid-row: 1;
+}
+
+.inputWrapper > button {
+  grid-column: 2;
+  grid-row: 1 / 3;
+}
+
+.inputWrapper > div {
+  display: contents;
+}
+
+.inputWrapper input[type="text"] {
+  text-align: center;
+  grid-column: 1;
+  grid-row: 2;
+  width: auto;
+  height: 3em;
+}
+
+.inputWrapper .dropdown {
+  grid-template-columns: repeat(auto-fit, minmax(10vw, 4em));
+  border: 0.5em solid rgb(247, 247, 247);
+  background-color: rgb(207, 204, 229);
+  grid-column: 1 / -1;
+  grid-row: 3;
+  position: static;
+  padding: 0.5em 0 0.5em 0;
+}
+
+.dropdown .active {
+  background-color: rgb(254, 224, 182);
+}
+
+.dropdown .item {
+  cursor: pointer;
+  padding: 0.5em;
+  text-align: center;
+  align-self: center;
+  justify-self: center;
+}
+
+.outletWrapper {
+  grid-row: 2 / -1;
+  grid-column: 1;
+}
+
+.equal,
+.worse,
+.better {
+  border: none;
+  font: inherit;
+  outline: inherit;
+  padding: 0.333em;
+}
+
+.error {
+  background-color: rgb(247, 204, 207);
 }
 
 .equal {
-  padding: 0.333em;
+  background-color: rgb(247, 247, 247);
 }
+
 .worse {
-  padding: 0.333em;
   background-color: rgb(207, 204, 229);
 }
 
 .better {
-  padding: 0.333em;
   background-color: rgb(254, 224, 182);
 }
 
 .result {
-  grid-template-columns: repeat(auto-fit, 3.33em 10em);
+  grid-template-columns: repeat(auto-fit, minmax(auto, 30vw));
   grid-auto-rows: auto;
-  font-size: 1.2em;
+}
+
+.result > div {
+  grid-template-rows: auto 1fr;
   display: grid;
-  gap: 1em;
+  gap: 0.333em;
 }
 
 .bytes {
+  resize: none;
   font-size: 1.2em;
+  word-spacing: -0.333em;
   font-family: monospace;
 }

@@ -14,46 +14,90 @@ const groupN = (s: string, n = 8, p = "0") => {
   return s.padStart(len, p).match(regex) || [];
 };
 
-const encode = (raw: number[]) => {
-  const tern = [...raw]
+const rawToTernary = (raw: number[]) => {
+  return [...raw]
     .map((n) => {
       return n.toString(2);
     })
     .join("2");
+};
+
+const ternaryToBinary = (tern: string) => {
   const ternPairs = groupN(tern, 2, "2");
-  const bin = ternPairs
+  return ternPairs
     .map((t2: string) => {
       const num = TERN8.indexOf(t2);
       return num.toString(2).padStart(3, "0");
     })
     .join("");
-  const binPad = groupN("1" + bin, 24).join("");
-  const bytes = groupN(binPad, 8);
-  const out = bytes.map((s: string) => parseInt(s, 2));
-  return out;
 };
 
-const decode = (raw: number[]) => {
-  const binPad = [...raw]
-    .map((n) => {
-      return n.toString(2).padStart(8, "0");
-    })
-    .join("");
-  const i0 = 1 + binPad.indexOf("1");
-  const bin = binPad.slice(i0);
-  const tern = groupN(bin, 3)
-    .map((bits: string) => {
-      return TERN8[parseInt(bits, 2)];
-    })
-    .join("")
-    .replace(/^2/, "");
-  const out = tern
+const binaryToIntegers = (bin: string) => {
+  const bytes = groupN(bin, 8);
+  return bytes.map((s: string) => parseInt(s, 2));
+};
+
+const bitsWithPadding = (bin: string) => {
+  return groupN("1" + bin, 24).join("");
+};
+
+const encode = (raw: number[]) => {
+  const tern = rawToTernary(raw);
+  const bin = ternaryToBinary(tern);
+  const binPad = bitsWithPadding(bin);
+  return binaryToIntegers(binPad);
+};
+
+const rawFromTernary = (tern: string) => {
+  return tern
     .split("2")
     .map((bits: string) => {
       return parseInt(bits, 2);
     })
     .filter((n: number) => !isNaN(n));
-  return out;
 };
 
-export { groupN as _groupN, encode, decode };
+const ternaryLookup = (bin: string) => {
+  return groupN(bin, 3).map((bits: string) => {
+    return TERN8[parseInt(bits, 2)];
+  });
+};
+
+const ternaryFromBinary = (bin: string) => {
+  return ternaryLookup(bin).join("").replace(/^2/, "");
+};
+
+const binaryFromIntegers = (ints: number[]) => {
+  return [...ints]
+    .map((n) => {
+      return n.toString(2).padStart(8, "0");
+    })
+    .join("");
+};
+
+const bitsWithoutPadding = (binPad: string) => {
+  const i0 = 1 + binPad.indexOf("1");
+  return binPad.slice(i0);
+};
+
+const decode = (ints: number[]) => {
+  const binPad = binaryFromIntegers(ints);
+  const bin = bitsWithoutPadding(binPad);
+  const tern = ternaryFromBinary(bin);
+  return rawFromTernary(tern);
+};
+
+export {
+  bitsWithoutPadding as _bitsWithoutPadding,
+  binaryFromIntegers as _binaryFromIntegers,
+  ternaryFromBinary as _ternaryFromBinary,
+  binaryToIntegers as _binaryToIntegers,
+  bitsWithPadding as _bitsWithPadding,
+  ternaryToBinary as _ternaryToBinary,
+  rawFromTernary as _rawFromTernary,
+  rawToTernary as _rawToTernary,
+  ternaryLookup as _ternaryLookup,
+  groupN as _groupN,
+  encode,
+  decode,
+};
