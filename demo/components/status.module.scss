@@ -1,0 +1,32 @@
+.error,
+.equal,
+.worse,
+.better {
+  border: none;
+  font: inherit;
+  outline: inherit;
+  padding: 0.333em;
+}
+
+.error {
+  background-color: rgb(247, 204, 207);
+}
+
+.equal {
+  background-color: rgb(247, 247, 247);
+}
+
+.worse {
+  background-color: rgb(207, 204, 229);
+}
+
+.better {
+  background-color: rgb(254, 224, 182);
+}
+
+.bytes {
+  resize: none;
+  font-size: 1.2em;
+  word-spacing: -0.333em;
+  font-family: monospace;
+}

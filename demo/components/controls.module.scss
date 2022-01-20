@@ -1,4 +1,3 @@
-.examples,
 .main,
 .result,
 .intro,
@@ -7,11 +6,6 @@
   justify-content: space-evenly;
   display: grid;
   gap: 0.333em;
-}
-
-.examples {
-  grid-template-columns: repeat(auto-fit, 5em);
-  grid-auto-rows: auto;
 }
 
 .intro {
@@ -56,8 +50,8 @@
   height: 3em;
 }
 
-.inputWrapper .dropdown {
-  grid-template-columns: repeat(auto-fit, minmax(10vw, 4em));
+.inputWrapper > div > div.dropdown {
+  grid-template-columns: repeat(auto-fit, minmax(10vw, 5em));
   border: 0.5em solid rgb(247, 247, 247);
   background-color: rgb(207, 204, 229);
   grid-column: 1 / -1;
@@ -83,33 +77,8 @@
   grid-column: 1;
 }
 
-.equal,
-.worse,
-.better {
-  border: none;
-  font: inherit;
-  outline: inherit;
-  padding: 0.333em;
-}
-
-.error {
-  background-color: rgb(247, 204, 207);
-}
-
-.equal {
-  background-color: rgb(247, 247, 247);
-}
-
-.worse {
-  background-color: rgb(207, 204, 229);
-}
-
-.better {
-  background-color: rgb(254, 224, 182);
-}
-
 .result {
-  grid-template-columns: repeat(auto-fit, minmax(auto, 30vw));
+  grid-template-columns: repeat(2, minmax(5em, 30vw));
   grid-auto-rows: auto;
 }
 
@@ -119,9 +88,6 @@
   gap: 0.333em;
 }
 
-.bytes {
-  resize: none;
-  font-size: 1.2em;
-  word-spacing: -0.333em;
-  font-family: monospace;
+.result > div.fullWidth {
+  grid-column: 1 / -1;
 }

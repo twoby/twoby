@@ -4,6 +4,7 @@ type OptionsTuple = [string, Options];
 export type Props = {
   options?: Options;
   inputs?: number[][];
+  clearCache?: () => void;
 };
 
 const getAllProps = () => {

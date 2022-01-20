@@ -1,0 +1,12 @@
+@import "status.module";
+
+.examples {
+  justify-content: space-evenly;
+  display: grid;
+  gap: 0.333em;
+}
+
+.examples {
+  grid-template-columns: repeat(auto-fit, 5em);
+  grid-auto-rows: auto;
+}

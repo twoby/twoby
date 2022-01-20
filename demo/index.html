@@ -11,8 +11,8 @@
   <body>
     <div id="index"></div>
     <script type="module">
-      import Example from "./Example";
-      import { getProps } from "./exampleProps";
+      import Page from "./components/page";
+      import { getProps } from "./lib/props";
       import { createRoot } from "react-dom";
       import { createElement } from "react";
 
@@ -30,8 +30,8 @@
       root.render(
         createElement("div", null, [
           ...propList.map((props, key) => {
-            const exampleProps = { ...props, inputs, key };
-            return createElement(Example, exampleProps);
+            const pageProps = { ...props, inputs, key };
+            return createElement(Page, pageProps);
           }),
         ])
       );
