@@ -1,7 +1,20 @@
 import { defineConfig } from "vite";
 import reactRefresh from "@vitejs/plugin-react-refresh";
-import macrosPlugin from "vite-plugin-babel-macros";
 
 export default defineConfig({
-  plugins: [reactRefresh(), macrosPlugin()],
+  plugins: [
+    reactRefresh({
+      babel: {
+        plugins: [
+          [
+            "babel-plugin-styled-components",
+            {
+              displayName: true,
+              fileName: false,
+            },
+          ],
+        ],
+      },
+    }),
+  ],
 });

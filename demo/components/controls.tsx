@@ -4,20 +4,10 @@ import styles from "./controls.module.scss";
 import { useParams, useNavigate, Outlet } from "react-router-dom";
 import { parseInput, roundTrip } from "../lib/io";
 import { explainSteps, explainResults } from "../lib/explain";
+import { compareLength, indexQuality } from "../lib/quality.ts";
 import { toLabel } from "../lib/label";
 import Choices from "./choices";
 import Status from "./status";
-
-const indexQuality = (i, source = null) => {
-  const label = ["worse", "equal", "better"][i];
-  return source ? source[label] : label;
-};
-
-const compareLength = (in8, source) => {
-  const { twoby8 } = roundTrip(in8);
-  const diff = Math.sign(in8.length - twoby8.length);
-  return indexQuality(diff + 1, source);
-};
 
 const SEP = ",";
 const Controls = (props) => {

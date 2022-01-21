@@ -1,11 +1,19 @@
-.error,
-.equal,
-.worse,
-.better {
+@mixin label {
   border: none;
   font: inherit;
   outline: inherit;
   padding: 0.333em;
+}
+
+@mixin neutral {
+  background-color: rgb(247, 247, 247);
+}
+
+.error,
+.equal,
+.worse,
+.better {
+  @include label;
 }
 
 .error {
@@ -13,7 +21,7 @@
 }
 
 .equal {
-  background-color: rgb(247, 247, 247);
+  @include neutral;
 }
 
 .worse {
