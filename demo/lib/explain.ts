@@ -12,7 +12,7 @@ import {
   rawFromTernary,
   ternaryLookup,
 } from "../../src/decode.ts";
-import { validateHexBytes, validateTwoby } from "./validate";
+import { validateString, validateHexBytes, validateTwoby } from "./validate";
 
 const asBytes = (input, n = 2) => {
   const bytes = [...input]

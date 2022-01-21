@@ -49,4 +49,4 @@ const validateHexBytes = (v) => {
   return validateHex(v, { padLen: 2, sep: " " });
 };
 
-export { validateHexBytes, validateTwoby };
+export { validateString, validateHexBytes, validateTwoby };
