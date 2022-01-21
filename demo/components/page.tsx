@@ -3,7 +3,7 @@ import { useState } from "react";
 import { getProps } from "../lib/props";
 import { createGlobalStyle } from 'styled-components'
 import styled from "styled-components";
-import Controls from "./controls";
+import Main from "./main";
 import Examples from "./examples";
 import { HashRouter, Routes, Route } from "react-router-dom";
 
@@ -16,6 +16,10 @@ const fontList = ["Tahoma", "Verdana", "sans-serif"];
 
 const MainDiv = styled.div`
   font-family: ${fontList.join(",")};
+  grid-template-columns: minmax(66vw, auto);
+  justify-content: space-evenly;
+  grid-auto-rows: auto;
+  display: grid;
 `;
 const BodyStyle = createGlobalStyle`
   body {
@@ -26,14 +30,14 @@ const BodyStyle = createGlobalStyle`
 
 const Page = (props: Props) => {
   const [cacheText, setCacheText] = useState(new Map());
-  const controlsProps = { cacheText, setCacheText };
+  const mainProps = { cacheText, setCacheText };
   const clearCache = () => setCacheText(new Map());
   const examplesProps = {
     ...props,
     clearCache,
   };
 
-  const controls = <Controls {...controlsProps} />;
+  const main = <Main {...mainProps} />;
   const examples = <Examples {...examplesProps} />;
 
   const twobyLink = <a href="https://github.com/twoby/twoby">Twoby</a>;
@@ -43,7 +47,7 @@ const Page = (props: Props) => {
       <MainDiv>
         <h2>{twobyLink} (two-separated binary)</h2>
         <Routes>
-          <Route path="/" element={controls}>
+          <Route path="/" element={main}>
             <Route path=":input" element={examples} />;
             <Route path="" element={examples} />;
           </Route>

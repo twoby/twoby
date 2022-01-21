@@ -1,6 +1,6 @@
 import React from "react";
 import { useState } from "react";
-import styles from "./controls.module.scss";
+import styles from "./main.module.scss";
 import { useParams, useNavigate, Outlet } from "react-router-dom";
 import { parseInput, roundTrip } from "../lib/io";
 import { explainSteps, explainResults } from "../lib/explain";
@@ -10,7 +10,7 @@ import Choices from "./choices";
 import Status from "./status";
 
 const SEP = ",";
-const Controls = (props) => {
+const Main = (props) => {
   const { cacheText, setCacheText } = props;
   const { input } = {
     input: "",
@@ -82,52 +82,56 @@ const Controls = (props) => {
   };
   return (
     <>
-      <div className={styles.intro}>
-        <div className={msgClass}>{msg}.</div>
-        <div className={styles.result}>
-          {results.map(([label, value, sep, validate], key) => {
-            const val = [...value].join(sep);
-            const text = cacheText.get(label) || val;
-            const setText = (t) => {
-              setCacheText(new Map([...cacheText, [label, t]]));
-            };
-            const fullWidth = key === results.length - 1;
-            const cls = fullWidth ? styles.fullWidth : null;
-            const statusProps = {
-              label,
-              text,
-              setText,
-              key,
-              validate,
-              setInput,
-              cls,
-            };
-            return <Status {...statusProps} />;
-          })}
-        </div>
-        <h3>Explore</h3>
-        <div className={styles.result}>
-          {steps.map(([label, value, sep, validate], key) => {
-            const val = [...value].join(sep);
-            const text = cacheText.get(label) || val;
-            const setText = (t) => {
-              setCacheText(new Map([...cacheText, [label, t]]));
-            };
-            const statusProps = {
-              label,
-              text,
-              setText,
-              key,
-              validate,
-              setInput,
-            };
-            return <Status {...statusProps} />;
-          })}
-        </div>
-      </div>
       <div className={styles.main}>
-        <div className={styles.inputWrapper}>
-          <label> Integer format </label>
+        <div className={styles.row}>
+          <div className={msgClass}>{msg}.</div>
+          <div className={styles.result}>
+            {results.map(([label, value, sep, validate], key) => {
+              const val = [...value].join(sep);
+              const text = cacheText.get(label) || val;
+              const setText = (t) => {
+                setCacheText(new Map([...cacheText, [label, t]]));
+              };
+              const fullWidth = key === results.length - 1;
+              const cls = fullWidth ? styles.fullWidth : null;
+              const statusProps = {
+                label,
+                text,
+                setText,
+                key,
+                validate,
+                setInput,
+                cls,
+              };
+              return <Status {...statusProps} />;
+            })}
+          </div>
+        </div>
+        <div className={styles.row}>
+          <h3>Explore</h3>
+          <div className={styles.result}>
+            {steps.map(([label, value, sep, validate], key) => {
+              const val = [...value].join(sep);
+              const text = cacheText.get(label) || val;
+              const setText = (t) => {
+                setCacheText(new Map([...cacheText, [label, t]]));
+              };
+              const statusProps = {
+                label,
+                text,
+                setText,
+                key,
+                validate,
+                setInput,
+              };
+              return <Status {...statusProps} />;
+            })}
+          </div>
+        </div>
+        <div className={styles.wrapper}>
+          <div className={styles.center}>
+            <span>Integer format</span>
+          </div>
           <Choices
             {...{
               choiceStyles,
@@ -136,11 +140,13 @@ const Controls = (props) => {
               choose,
             }}
           />
-          <button onClick={togglePad} className={padClass}>
-            {padSymbol} Padding
-          </button>
+          <div className={styles.right}>
+            <button onClick={togglePad} className={padClass}>
+              {padSymbol} Padding
+            </button>
+          </div>
         </div>
-        <div className={styles.outletWrapper}>
+        <div className={styles.row}>
           <Outlet />
         </div>
       </div>
@@ -148,4 +154,4 @@ const Controls = (props) => {
   );
 };
 
-export default Controls;
+export default Main;
