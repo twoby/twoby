@@ -45,6 +45,7 @@
 .wrapper > div > div.dropdown {
   @include neutral-bottom;
   grid-template-columns: repeat(auto-fit, minmax(5em, 12%));
+  grid-auto-rows: auto;
   grid-column: 1 / -1;
   grid-row: 5;
   position: static;
