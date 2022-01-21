@@ -16,7 +16,7 @@
 }
 
 .main {
-  grid-template-rows: 5em minmax(3em, auto) 1fr;
+  grid-template-rows: auto minmax(3em, auto) 1fr;
   grid-template-columns: 100%;
 }
 
@@ -35,15 +35,15 @@
 }
 
 .inputWrapper > label {
-  @include neutral;
   @include label;
+  @include neutral-top;
   grid-column: 1;
   grid-row: 1;
 }
 
 .inputWrapper > button {
   grid-column: 3;
-  grid-row: 1 / -2;
+  grid-row: 2 / -2;
 }
 
 .inputWrapper > div {
@@ -51,6 +51,8 @@
 }
 
 .inputWrapper input[type="text"] {
+  @include bytes;
+  @include neutral-bottom;
   font-weight: bold;
   text-align: center;
   grid-column: 1 / -2;
@@ -60,22 +62,27 @@
 }
 
 .inputWrapper > div > div.dropdown {
+  @include neutral-bottom;
   grid-template-columns: repeat(auto-fit, minmax(5em, 12%));
-  border: 0.5em solid rgb(247, 247, 247);
-  background-color: rgb(207, 204, 229);
   grid-column: 1 / -1;
   grid-row: 3;
   position: static;
   padding: 0.5em 0 0.5em 0;
 }
 
-.dropdown .active {
-  background-color: rgb(254, 224, 182);
+.dropdown .item.active {
+  @include label;
+  @include better;
 }
 
 .dropdown .item {
+  @include label;
+  @include worse;
+  display: grid;
+  height: 60%;
   cursor: pointer;
   padding: 0.5em;
+  align-items: center;
   text-align: center;
   align-self: center;
   justify-self: center;

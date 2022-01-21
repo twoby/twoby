@@ -3,10 +3,42 @@
   font: inherit;
   outline: inherit;
   padding: 0.333em;
+  border-radius: 0.333em;
+}
+
+@mixin bytes {
+  resize: none;
+  display: grid;
+  padding: 0.333em;
+  font-size: 1.2em;
+  align-items: center;
+  word-spacing: -0.333em;
+  font-family: monospace;
+  border-radius: 0.333em;
 }
 
 @mixin neutral {
-  background-color: rgb(247, 247, 247);
+  background-color: rgb(244, 255, 244);
+}
+
+@mixin neutral-bottom {
+  @include neutral;
+  border-bottom: .5em ridge rgba(198, 224, 216, 0.5);
+}
+
+@mixin neutral-top {
+  @include neutral;
+  border-top: .5em groove rgba(198, 224, 216, 0.5);
+}
+
+@mixin worse {
+  background-color: rgb(207, 204, 229);
+  border-bottom: .5em ridge rgba(198, 198, 224, 0.5);
+}
+
+@mixin better {
+  background-color: rgb(254, 224, 182);
+  border-top: .5em groove rgba(224, 216, 198, 0.5);
 }
 
 .error,
@@ -18,23 +50,26 @@
 
 .error {
   background-color: rgb(247, 204, 207);
+  border-top: .5em groove rgba(224, 198, 216, 0.5);
 }
 
 .equal {
+  @include neutral-top;
+}
+
+button.equal {
   @include neutral;
 }
 
 .worse {
-  background-color: rgb(207, 204, 229);
+  @include worse;
 }
 
 .better {
-  background-color: rgb(254, 224, 182);
+  @include better;
 }
 
 .bytes {
-  resize: none;
-  font-size: 1.2em;
-  word-spacing: -0.333em;
-  font-family: monospace;
+  @include neutral-bottom;
+  @include bytes;
 }
