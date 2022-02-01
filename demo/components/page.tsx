@@ -1,11 +1,15 @@
 import React from "react";
-import { useState } from "react";
 import { getProps } from "../lib/props";
 import { createGlobalStyle } from 'styled-components'
 import styled from "styled-components";
 import Main from "./main";
 import Examples from "./examples";
-import { HashRouter, Routes, Route } from "react-router-dom";
+import { useHashHistory } from "use-hash-history";
+import { Routes, Route } from "react-router-dom";
+import { 
+  unstable_HistoryRouter as HistoryRouter
+} from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 
 // Types
 import type { Props } from "../lib/props";
@@ -29,21 +33,18 @@ const BodyStyle = createGlobalStyle`
 `
 
 const Page = (props: Props) => {
-  const [cacheText, setCacheText] = useState(new Map());
-  const mainProps = { cacheText, setCacheText };
-  const clearCache = () => setCacheText(new Map());
-  const examplesProps = {
-    ...props,
-    clearCache,
-  };
-
+  const { hashRoot, inputs } = props;
+  const history = useHashHistory({ hashRoot });
+  const mainProps = { history };
+  const routerProps = { history };
+  const examplesProps = { inputs };
   const main = <Main {...mainProps} />;
   const examples = <Examples {...examplesProps} />;
 
   const twobyLink = <a href="https://github.com/twoby/twoby">Twoby</a>;
 
   return (
-    <HashRouter history={history}>
+    <HistoryRouter {...routerProps}>
       <MainDiv>
         <h2>{twobyLink} (two-separated binary)</h2>
         <Routes>
@@ -54,7 +55,7 @@ const Page = (props: Props) => {
         </Routes>
       </MainDiv>
       <BodyStyle/>
-    </HashRouter>
+    </HistoryRouter>
   );
 };
 

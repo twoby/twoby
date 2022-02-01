@@ -2,16 +2,17 @@ type Options = Record<string, unknown>;
 type OptionsTuple = [string, Options];
 
 export type Props = {
-  options?: Options;
+  hashRoot: string;
+  options: Options;
   inputs?: number[][];
-  clearCache?: () => void;
 };
 
 const getAllProps = () => {
+  const hashRoot = "";
   const optionList: OptionsTuple[] = [["default", {}]];
   return new Map<string, Props>(
     optionList.map(([key, options]) => {
-      return [key, { options }];
+      return [key, { options, hashRoot }];
     })
   );
 };

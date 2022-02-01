@@ -4,17 +4,15 @@ import { Link } from "react-router-dom";
 import { compareLength } from "../lib/quality.ts";
 
 // Types
-import type { Props } from "../lib/props";
+import type { Props as AllProps } from "../lib/props";
+type Props = Pick<AllProps, "inputs">
 
 const toUint8 = (input) => {
   return Uint8Array.from(input);
 };
 
 const Examples = (props: Props) => {
-  const { inputs, clearCache } = props;
-  const onClick = () => {
-    clearCache();
-  };
+  const { inputs } = props;
   return (
     <>
       <h3>Examples</h3>
@@ -24,7 +22,7 @@ const Examples = (props: Props) => {
           const to = "/" + list.join(",");
           const in8 = toUint8(list);
           const className = compareLength(in8, styles);
-          const linkProps = { key, className, to, onClick };
+          const linkProps = { key, className, to };
           return <Link {...linkProps}>[{text}]</Link>;
         })}
       </div>

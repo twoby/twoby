@@ -6,7 +6,7 @@ const capFirst = (str) => {
 
 const toUnitLabel = ({ padLen, numBits }) => {
   const patterns = [
-    [".*x24", "3x bytes"],
+    [".*x24", "3-bytes"],
     [".*x8", "bytes"],
     ["1x1", "bits"],
     ["1x.*", "digits"],

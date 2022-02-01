@@ -4,31 +4,18 @@ import styles from "./status.module.scss";
 
 const Status = (props) => {
   const { text, setText } = props;
-  const { validate, setInput } = props;
-  const canChange = !!validate && !!setInput;
-  const ok = !canChange || !!validate(text);
+  const { validate, onChange } = props;
+  const ok = !validate || validate(text);
 
-  const onChange = canChange
-    ? (e) => {
-        const v = e.target.value;
-        const result = validate(v);
-        if (!!result === true) {
-          setInput(result);
-          setText(null);
-        } else {
-          setText(v);
-        }
-      }
-    : undefined;
   const basicProps = {
     className: styles.bytes,
   };
   const inputProps = {
     ...basicProps,
     value: text,
-    onChange,
     maxRows: 12,
     minRows: 1,
+    onChange,
   };
   const content = validate ? (
     <TextareaAutosize {...inputProps} />
@@ -38,7 +25,7 @@ const Status = (props) => {
 
   const labelCls = ok ? styles.equal : styles.error;
   return (
-    <div className={props.cls}>
+    <div>
       <div className={labelCls}>{props.label}</div>
       {content}
     </div>

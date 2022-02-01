@@ -1,32 +1,23 @@
 import React from "react";
 import { useState } from "react";
 import styles from "./main.module.scss";
-import { useParams, useNavigate, Outlet } from "react-router-dom";
-import { parseInput, roundTrip } from "../lib/io";
+import { Outlet } from "react-router-dom";
+import { roundTrip } from "../lib/io";
 import { explainSteps, explainResults } from "../lib/explain";
-import { compareLength, indexQuality } from "../lib/quality.ts";
+import { compareLength, indexQuality } from "../lib/quality";
+import { useHash } from "../hooks/useHash";
+import { useCache } from "../hooks/useCache";
+import { handleText } from "../lib/handler";
 import { toLabel } from "../lib/label";
 import Choices from "./choices";
 import Status from "./status";
 
-const SEP = ",";
 const Main = (props) => {
-  const { cacheText, setCacheText } = props;
-  const { input } = {
-    input: "",
-    ...useParams(),
-  };
-  const navigate = useNavigate();
-  const setInput = (in8) => {
-    const output = [...in8].join(SEP);
-    const pathname = `/${output}`;
-    navigate({ pathname });
-  };
-  const inString = input.split(SEP);
-  const in8 = parseInput(inString, {
-    radix: 10,
-    sep: SEP,
-  });
+  const hist = props.history;
+  const { hash, updateHash } = useHash();
+  const { cache, setCache, updateCache } = useCache(hist);
+  const setInput = (input) => updateHash({ input });
+  const in8 = hash.input;
   const msg = compareLength(in8, {
     better: "✓ Encoding is shorter than input",
     worse: "✗ Encoding is longer than input",
@@ -62,11 +53,11 @@ const Main = (props) => {
 
   const steps = explainSteps({ in8, twoby8, pad, choice });
   const choose = (value) => {
-    setCacheText(new Map());
+    setCache(new Map());
     setChoice(value);
   };
   const togglePad = () => {
-    setCacheText(new Map());
+    setCache(new Map());
     setPad(!pad);
   };
   const { padSymbol, padClass } = ((i) => {
@@ -88,20 +79,17 @@ const Main = (props) => {
           <div className={styles.result}>
             {results.map(([label, value, sep, validate], key) => {
               const val = [...value].join(sep);
-              const text = cacheText.get(label) || val;
-              const setText = (t) => {
-                setCacheText(new Map([...cacheText, [label, t]]));
-              };
-              const fullWidth = key === results.length - 1;
-              const cls = fullWidth ? styles.fullWidth : null;
+              const text = cache.get(label) || val;
+              const setText = (t) => updateCache(label, t);
+              const onChange = handleText({
+                setInput, setText, validate
+              })
               const statusProps = {
-                label,
-                text,
-                setText,
                 key,
+                text,
+                label,
                 validate,
-                setInput,
-                cls,
+                onChange
               };
               return <Status {...statusProps} />;
             })}
@@ -112,17 +100,17 @@ const Main = (props) => {
           <div className={styles.result}>
             {steps.map(([label, value, sep, validate], key) => {
               const val = [...value].join(sep);
-              const text = cacheText.get(label) || val;
-              const setText = (t) => {
-                setCacheText(new Map([...cacheText, [label, t]]));
-              };
+              const text = cache.get(label) || val;
+              const setText = (t) => updateCache(label, t);
+              const onChange = handleText({
+                setInput, setText, validate
+              })
               const statusProps = {
-                label,
-                text,
-                setText,
                 key,
+                text,
+                label,
                 validate,
-                setInput,
+                onChange,
               };
               return <Status {...statusProps} />;
             })}
