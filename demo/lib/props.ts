@@ -8,11 +8,14 @@ export type Props = {
 };
 
 const getAllProps = () => {
-  const hashRoot = "";
+  const hist = {
+    hashRoot: "",
+    hashSlash: "#",
+  };
   const optionList: OptionsTuple[] = [["default", {}]];
   return new Map<string, Props>(
     optionList.map(([key, options]) => {
-      return [key, { options, hashRoot }];
+      return [key, { options, hist }];
     })
   );
 };

@@ -1,14 +1,13 @@
-import { roundTrip } from "../lib/io";
-
-const indexQuality = (i, source = null) => {
-  const label = ["worse", "equal", "better"][i];
-  return source ? source[label] : label;
+const listQuality = (obj) => {
+  return ["✗", "✗", "✓"].map((symbol, i) => {
+    const list = [obj.worse, obj.equal, obj.better];
+    return { symbol, className: list[i] };
+  });
 };
 
-const compareLength = (in8, source) => {
-  const { twoby8 } = roundTrip(in8);
-  const diff = Math.sign(in8.length - twoby8.length);
-  return indexQuality(diff + 1, source);
+const compareLength = (a, b, source) => {
+  const diff = Math.sign(a.length - b.length);
+  return source[diff + 1];
 };
 
-export { indexQuality, compareLength };
+export { listQuality, compareLength };

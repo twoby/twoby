@@ -9,13 +9,13 @@ import { groupN } from "./common";
 const rawToTernary = (raw: number[]) => {
   return [...raw]
     .map((n) => {
-      return n.toString(2);
+      return "2" + n.toString(2);
     })
-    .join("2");
+    .join("");
 };
 
 const ternaryToBinary = (tern: string) => {
-  const ternPairs = groupN(tern, 2, "2");
+  const ternPairs = groupN(tern, 2, "0");
   return ternPairs
     .map((t2: string) => {
       const num = parseInt(t2, 3);
@@ -24,26 +24,21 @@ const ternaryToBinary = (tern: string) => {
     .join("");
 };
 
-const bitsWithPadding = (bin: string) => {
-  return groupN("1" + bin, 24).join("");
+const addPadding = (bin: string) => {
+  const binOrEmpty = bin || "0";
+  return groupN(binOrEmpty, 8, "0").join("");
 };
 
 const binaryToIntegers = (bin: string) => {
-  const bytes = groupN(bin, 8);
+  const bytes = groupN(bin, 8, "0");
   return bytes.map((s: string) => parseInt(s, 2));
 };
 
 const encode = (raw: number[]) => {
   const tern = rawToTernary(raw);
   const bin = ternaryToBinary(tern);
-  const binPad = bitsWithPadding(bin);
+  const binPad = addPadding(bin);
   return binaryToIntegers(binPad);
 };
 
-export {
-  rawToTernary,
-  ternaryToBinary,
-  bitsWithPadding,
-  binaryToIntegers,
-  encode,
-};
+export { rawToTernary, ternaryToBinary, binaryToIntegers, encode };

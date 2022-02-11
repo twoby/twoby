@@ -1,0 +1,28 @@
+@import "grid";
+
+.result {
+  @include grid;
+  grid-template-columns: repeat(2, minmax(300px, 1fr));
+  justify-content: space-evenly;
+  grid-auto-rows: auto;
+}
+
+@media (max-width: 600px) {
+  .result {
+    grid-template-columns: 1fr;
+  }
+}
+
+.result > div {
+  grid-template-rows: auto 1fr;
+  display: grid;
+  gap: 0.333em;
+}
+
+.result > div:nth-child(odd) {
+  grid-column-start: 1;
+}
+
+.result > div:last-child {
+  grid-column-end: -1;
+}

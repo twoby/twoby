@@ -2,7 +2,7 @@ import { suite } from "uvu";
 import * as assert from "uvu/assert";
 import { encode, decode } from "../src/index.ts";
 
-const TESTS = [[], [0], [2, 2, 2, 2]];
+const TESTS = [[], [0], [2, 2, 2], [0, 1, 2, 4, 9, 19]];
 
 const testUint8 = (input) => {
   const in8 = Uint8Array.from(input);

@@ -1,40 +1,37 @@
 import React from "react";
+import styles from "./choices.module.scss";
 import DataListInput from "react-datalist-input";
+import { toLabel } from "../lib/label";
 
-const Choices = (props) => {
+const ChoiceList = (props) => {
   const hasChoice = !!props.choice;
   const { choices, choose } = props;
   const { choiceStyles } = props;
+  const labels = choices.map(toLabel);
 
   const onInput = () => {
     choose(null);
   };
   const onSelect = ({ key }) => {
     choose(
-      choices.find(({ label }) => {
-        return label.value === key;
+      choices.find((_, i) => {
+        return labels[i].value === key;
       }) || null
     );
   };
-  const placeholder = `Explore Twoby encoding...`;
-  const items = choices.map(({ label, radix }) => {
-    const { value, unit, base, text } = label;
+  const placeholder = `Explore encodings...`;
+  const items = labels.map((label) => {
     return {
-      unit,
-      base,
-      radix,
-      key: value,
-      label: text,
+      key: label.value,
+      label: label.text,
     };
   });
-  const match = (val, { base, radix, unit }) => {
+  const match = (val, { label }) => {
     if (hasChoice) {
       return true;
     }
-    const ibase = `${radix}`;
     return val.split(" ").some((v) => {
-      const rx = new RegExp("^" + v, "i");
-      return unit.match(rx) || base.match(rx) || ibase.match(rx);
+      return label.match(new RegExp(`(^| )${v}`, "i"));
     });
   };
   const choiceProps = {
@@ -46,6 +43,33 @@ const Choices = (props) => {
     onInput,
   };
   return <DataListInput {...choiceProps} />;
+};
+
+const Choices = (props) => {
+  const { togglePad, qualia, pad } = props;
+  const padIndex = !props.choice ? 1 : 2 * !!pad;
+  const { symbol: padSymbol } = qualia[padIndex];
+  const { className } = qualia[padIndex];
+
+  const choiceStyles = {
+    dropdownClassName: styles.dropdown,
+    activeItemClassName: styles.active,
+    itemClassName: styles.item,
+  };
+
+  return (
+    <div className={styles.wrapper}>
+      <div className={styles.center}>
+        <span>Integer format</span>
+      </div>
+      <ChoiceList {...{ ...props, choiceStyles }} />
+      <div className={styles.right}>
+        <button onClick={togglePad} className={className}>
+          {padSymbol} Padding
+        </button>
+      </div>
+    </div>
+  );
 };
 
 export default Choices;

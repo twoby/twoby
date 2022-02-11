@@ -1,9 +1,10 @@
-@mixin label {
+@mixin label($color, $edge) {
   border: none;
   font: inherit;
   outline: inherit;
   padding: 0.333em;
   border-radius: 0.333em;
+  border-#{$edge}: 0.5em groove $color;
 }
 
 @mixin bytes {
@@ -15,61 +16,46 @@
   word-spacing: -0.333em;
   font-family: monospace;
   border-radius: 0.333em;
+  background-color: rgb(244, 255, 244);
+  border-bottom: 0.5em ridge rgba(198, 224, 216, 0.5);
 }
 
-@mixin neutral {
+@mixin neutral($edge) {
+  @include label(rgba(198, 224, 216, 0.5), $edge);
   background-color: rgb(244, 255, 244);
 }
 
-@mixin neutral-bottom {
-  @include neutral;
-  border-bottom: .5em ridge rgba(198, 224, 216, 0.5);
-}
-
-@mixin neutral-top {
-  @include neutral;
-  border-top: .5em groove rgba(198, 224, 216, 0.5);
-}
-
-@mixin worse {
+@mixin worse($edge) {
+  @include label(rgba(198, 198, 224, 0.5), $edge);
   background-color: rgb(207, 204, 229);
-  border-bottom: .5em ridge rgba(198, 198, 224, 0.5);
 }
 
-@mixin better {
+@mixin better($edge) {
+  @include label(rgba(224, 216, 198, 0.5), $edge);
   background-color: rgb(254, 224, 182);
-  border-top: .5em groove rgba(224, 216, 198, 0.5);
-}
-
-.error,
-.equal,
-.worse,
-.better {
-  @include label;
 }
 
 .error {
+  @include label(rgba(224, 198, 216, 0.5), "top");
   background-color: rgb(247, 204, 207);
-  border-top: .5em groove rgba(224, 198, 216, 0.5);
+}
+
+button.worse {
+  @include worse("bottom");
 }
 
 .equal {
-  @include neutral-top;
-}
-
-button.equal {
-  @include neutral;
+  @include neutral("top");
 }
 
 .worse {
-  @include worse;
+  @include worse("top");
 }
 
 .better {
-  @include better;
+  @include better("top");
 }
 
 .bytes {
-  @include neutral-bottom;
   @include bytes;
 }

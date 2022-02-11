@@ -1,13 +1,9 @@
+@import "grid";
 @import "status.module";
 
-.main,
 .row,
-.result,
-.wrapper,
-.dropdown {
-  justify-content: space-evenly;
-  display: grid;
-  gap: 0.333em;
+.main {
+  @include grid;
 }
 
 .main {
@@ -21,85 +17,6 @@
   grid-column: 1 / -1;
 }
 
-.wrapper, .wrapper > div {
-  display: contents;
-  z-index: 1;
-}
-
-.wrapper > .center > * {
-  @include label;
-  @include neutral-top;
-  grid-column: 2;
-}
-
-.wrapper > div > input[type="text"] {
-  @include bytes;
-  @include neutral-bottom;
-  font-weight: bold;
-  text-align: center;
-  grid-column: 2;
-  width: auto;
-  height: 3em;
-}
-
-.wrapper > div > div.dropdown {
-  @include neutral-bottom;
-  grid-template-columns: repeat(auto-fit, minmax(5em, auto));
-  grid-auto-rows: auto;
-  grid-column: 1 / -1;
-  grid-row: 5;
-  position: static;
-  padding: 0.5em 0 0.5em 0;
-}
-
-.wrapper > .right > * {
-  grid-column: -2;
-}
-
 .main > div:last-child {
   grid-row: 5 / span 2;
-}
-
-.dropdown .item.active {
-  @include label;
-  @include better;
-}
-
-.dropdown .item {
-  @include label;
-  @include worse;
-  display: grid;
-  min-height: 60%;
-  cursor: pointer;
-  padding: 0.5em;
-  align-items: center;
-  text-align: center;
-  align-self: center;
-  justify-self: center;
-}
-
-.result {
-  grid-template-columns: repeat(2, minmax(300px, 1fr));
-  justify-content: space-evenly;
-  grid-auto-rows: auto;
-}
-
-@media (max-width: 600px) {
-  .result {
-    grid-template-columns: 1fr;
-  }
-}
-
-.result > div {
-  grid-template-rows: auto 1fr;
-  display: grid;
-  gap: 0.333em;
-}
-
-.result > div:nth-child(odd) {
-  grid-column-start: 1;
-}
-
-.result > div:last-child {
-  grid-column-end: -1;
 }

@@ -14,11 +14,6 @@ const binaryFromIntegers = (ints: number[]) => {
     .join("");
 };
 
-const bitsWithoutPadding = (binPad: string) => {
-  const i0 = 1 + binPad.indexOf("1");
-  return binPad.slice(i0);
-};
-
 const ternaryLookup = (bin: string) => {
   return groupN(bin, 3).map((bits: string) => {
     return parseInt(bits, 2).toString(3).padStart(2, "0");
@@ -26,12 +21,17 @@ const ternaryLookup = (bin: string) => {
 };
 
 const ternaryFromBinary = (bin: string) => {
-  return ternaryLookup(bin).join("").replace(/^2/, "");
+  return ternaryLookup(bin).join("");
+};
+
+const removePadding = (bin: string) => {
+  return bin.slice(bin.indexOf("1"));
 };
 
 const rawFromTernary = (tern: string) => {
   return tern
     .split("2")
+    .slice(1)
     .map((bits: string) => {
       return parseInt(bits, 2);
     })
@@ -40,16 +40,16 @@ const rawFromTernary = (tern: string) => {
 
 const decode = (ints: number[]) => {
   const binPad = binaryFromIntegers(ints);
-  const bin = bitsWithoutPadding(binPad);
+  const bin = removePadding(binPad);
   const tern = ternaryFromBinary(bin);
   return rawFromTernary(tern);
 };
 
 export {
   binaryFromIntegers,
-  bitsWithoutPadding,
   ternaryFromBinary,
   rawFromTernary,
+  removePadding,
   ternaryLookup,
   decode,
 };

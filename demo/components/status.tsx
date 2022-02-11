@@ -1,11 +1,23 @@
 import React from "react";
 import TextareaAutosize from "react-textarea-autosize";
+import { handleText } from "../lib/handler";
 import styles from "./status.module.scss";
 
 const Status = (props) => {
-  const { text, setText } = props;
-  const { validate, onChange } = props;
-  const ok = !validate || validate(text);
+  const { uuid, label, editable = true } = props;
+  const { cache, updateCache } = props;
+  const { setInput, options } = props;
+
+  const cached = cache.has(uuid);
+  const setText = (t) => updateCache(uuid, t);
+  const text = cached ? cache.get(uuid) : props.text;
+  const ok = props.text === text;
+
+  const onChange = handleText({
+    setInput,
+    setText,
+    options,
+  });
 
   const basicProps = {
     className: styles.bytes,
@@ -17,7 +29,7 @@ const Status = (props) => {
     minRows: 1,
     onChange,
   };
-  const content = validate ? (
+  const content = editable ? (
     <TextareaAutosize {...inputProps} />
   ) : (
     <div {...basicProps}>{text}</div>
@@ -26,7 +38,7 @@ const Status = (props) => {
   const labelCls = ok ? styles.equal : styles.error;
   return (
     <div>
-      <div className={labelCls}>{props.label}</div>
+      <div className={labelCls}>{label}</div>
       {content}
     </div>
   );

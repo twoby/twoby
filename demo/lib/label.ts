@@ -1,41 +1,62 @@
+import { toBlockPadding } from "./transcode";
+
 const capFirst = (str) => {
   return str.replace(/^\w/, (c) => {
     return c.toUpperCase();
   });
 };
 
-const toUnitLabel = ({ padLen, numBits }) => {
-  const patterns = [
-    [".*x24", "3-bytes"],
+const toSepLabel = ({ sep }) => {
+  const patterns = new Map([[".*2.*", "joined by 2"]]);
+  const pattern = [...patterns.keys()].find((regex) => {
+    return sep?.match(new RegExp(regex));
+  });
+  const suffix = patterns.get(pattern) || "";
+  return suffix.split(" ");
+};
+
+const toUnitLabel = (choice) => {
+  const bytePadding = toBlockPadding(choice);
+  const { padding } = { padding: bytePadding, ...choice };
+  const key = `${padding}x${choice.bits || 0}`;
+  const patterns = new Map([
+    ["0x.*", ""],
+    [".*x24", "byte trios"],
+    [".*x3", "bit trios"],
+    [".*x4", "nibbles"],
     [".*x8", "bytes"],
-    ["1x1", "bits"],
     ["1x.*", "digits"],
     ["2x.*", "pairs"],
     ["3x.*", "trios"],
-  ].map(([regex, label]) => ({ regex, label }));
-  const key = `${padLen}x${numBits}`;
-
-  return (
-    patterns.find(({ regex }) => {
-      return key.match(new RegExp(regex));
-    })?.label || "???"
-  );
+  ]);
+  const pattern = [...patterns.keys()].find((regex) => {
+    return key.match(new RegExp(regex));
+  });
+  const suffix = patterns.get(pattern) || "";
+  return suffix.split(" ");
 };
 
-const toLabel = ({ radix, padLen, numBits }) => {
-  const unit = toUnitLabel({ radix, padLen, numBits });
-  const base =
+const matchLabel = (o) => {
+  return [o.name, toBase(o), ...toUnitLabel(o), ...toSepLabel(o)];
+};
+
+const toBase = ({ radix }) => {
+  return (
     new Map([
       [2, "binary"],
       [3, "ternary"],
-      [4, "base-4"],
-      [8, "octal"],
+      [10, "decimal"],
       [16, "hex"],
-    ]).get(radix) || "???";
-  const value = `${base}-${padLen}`;
-  const textInput = capFirst(`${base} input`);
-  const text = capFirst(`${base} ${unit}`);
-  return { value, unit, base, text, textInput };
+    ]).get(radix) || `base-${radix}`
+  );
 };
 
-export { toLabel };
+const toLabel = (choice) => {
+  const labels = matchLabel(choice).filter((v) => v);
+  return {
+    text: capFirst(labels.join(" ")),
+    value: labels.join("-"),
+  };
+};
+
+export { toLabel, capFirst, toBase };

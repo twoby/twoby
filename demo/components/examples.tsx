@@ -1,27 +1,29 @@
 import React from "react";
 import styles from "./examples.module.scss";
+import { roundTrip, toUint8 } from "../lib/io";
+import { compareLength, listQuality } from "../lib/quality.ts";
 import { Link } from "react-router-dom";
-import { compareLength } from "../lib/quality.ts";
+import { NavLinks } from "./navLinks";
 
 // Types
 import type { Props as AllProps } from "../lib/props";
-type Props = Pick<AllProps, "inputs">
-
-const toUint8 = (input) => {
-  return Uint8Array.from(input);
-};
+type Props = Pick<AllProps, "inputs">;
 
 const Examples = (props: Props) => {
   const { inputs } = props;
+  const links = [{ to: "/heat/", text: "View Heatmap" }];
+  const qualia = listQuality(styles);
   return (
     <>
+      <NavLinks {...{ links }} />
       <h3>Examples</h3>
       <div className={styles.examples}>
         {inputs.map((list, key) => {
           const text = list.join(", ");
-          const to = "/" + list.join(",");
           const in8 = toUint8(list);
-          const className = compareLength(in8, styles);
+          const { code8 } = roundTrip(in8);
+          const to = "/list/" + list.join(",");
+          const { className } = compareLength(in8, code8, qualia);
           const linkProps = { key, className, to };
           return <Link {...linkProps}>[{text}]</Link>;
         })}

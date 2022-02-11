@@ -1,0 +1,56 @@
+@import "grid";
+@import "status.module";
+
+.wrapper,
+.dropdown {
+  @include grid;
+}
+
+.wrapper,
+.wrapper > div {
+  display: contents;
+}
+
+.wrapper > .center > * {
+  @include neutral("top");
+  grid-column: 2;
+}
+
+.wrapper > div > input[type="text"] {
+  @include bytes;
+  font-weight: bold;
+  text-align: center;
+  grid-column: 2;
+  width: auto;
+  height: 3em;
+}
+
+.wrapper > div > div.dropdown {
+  @include neutral("bottom");
+  grid-template-columns: repeat(auto-fit, minmax(5em, auto));
+  grid-auto-rows: auto;
+  grid-column: 1 / -1;
+  grid-row: 5;
+  position: static;
+  padding: 0.5em 0 0.5em 0;
+}
+
+.wrapper > .right > * {
+  grid-column: -2;
+}
+
+.dropdown .item.active {
+  @include better("top");
+}
+
+.dropdown .item {
+  @include worse("bottom");
+  display: grid;
+  min-height: 60%;
+  cursor: pointer;
+  padding: 0.5em;
+  align-items: center;
+  text-align: center;
+  align-self: center;
+  justify-self: center;
+}

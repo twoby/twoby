@@ -1,0 +1,5 @@
+@mixin grid {
+  gap: 0.333em;
+  display: grid;
+  justify-content: space-evenly;
+}
