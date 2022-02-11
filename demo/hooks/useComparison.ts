@@ -22,7 +22,7 @@ const useComparison = (hash) => {
   const table = wu(range(domain + 1, 1)).reduce((out, n1) => {
     return [
       ...out,
-      ...wu(range(domain, 1)).map((n2) => {
+      ...wu(range(domain + 1, 1)).map((n2) => {
         return compare({ reps, n1, n2 });
       }),
     ];
