@@ -4,12 +4,14 @@ import styles from "./main.module.scss";
 import { Outlet } from "react-router-dom";
 import { listQuality } from "../lib/quality";
 import { useCache } from "../hooks/useCache";
-import { useHash } from "../hooks/useHash";
+import { useHash, usePage } from "../hooks/useHash";
+import { NavLinks } from "./pages/navLinks";
 import Choices from "./choices";
 import Results from "./results";
 
 const Main = (props) => {
   const hist = props.history;
+  const { noChoices = false } = props;
   const { hash, updateHash } = useHash();
   const { cache, setCache, updateCache } = useCache(hist);
   const setInput = (input) => updateHash({ input });
@@ -17,7 +19,6 @@ const Main = (props) => {
   const qualia = listQuality(styles);
   const choices = [
     { radix: 2, bits: 3 },
-    { radix: 2, bits: 4 },
     { radix: 16, bits: 8 },
     { radix: 16, bits: 24 },
   ];
@@ -34,18 +35,33 @@ const Main = (props) => {
     setPad(!pad);
   };
 
+  const noExplore = noChoices;
   const choiceProps = { pad, qualia, choices, choice, choose, togglePad };
   const result = { cls: styles.row, cache, updateCache, setInput };
-  const results = { result, in8, choice, qualia };
+  const results = { result, in8, choice, qualia, noExplore };
+  const activePage = usePage();
+  const items = [
+    <Results key={0} {...results} />,
+    noChoices ? "" : <Choices key={1} {...choiceProps} />,
+    <div key={2} className={styles.row}>
+      <Outlet />
+    </div>,
+  ];
+
+  if (activePage === "text") {
+    items.reverse();
+  }
+
+  const links = [
+    { to: "/list/", text: "Basic Examples" },
+    { to: "/text/", text: "Text Encoding" },
+    { to: "/heat/", text: "Heatmap Graph" },
+  ].filter(({ to }) => !to.match(new RegExp("^/" + activePage)));
+
   return (
     <>
-      <div className={styles.main}>
-        <Results {...results} />
-        <Choices {...choiceProps} />
-        <div className={styles.row}>
-          <Outlet />
-        </div>
-      </div>
+      <NavLinks {...{ links }} />
+      <div className={styles.main}>{items}</div>
     </>
   );
 };

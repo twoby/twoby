@@ -20,9 +20,9 @@
       const root = createRoot(findIndex(document));
       const inputs = [
         [],
-        ...[...Array(27).keys()].map((v) => {
-          const tern_str = (2 ** v).toString(3).split("");
-          return tern_str.map((n) => 2 ** parseInt(n));
+        ...[...Array(4**3).keys()].map((v) => {
+          const tern_str = (v).toString(4).split("");
+          return tern_str.map((n, i) => (i + 2) ** parseInt(n));
         }),
       ];
 

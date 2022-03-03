@@ -4,41 +4,74 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import { groupN } from "./common";
+import { match, groupN, bitsFromInts, bitsToInts } from "./common";
 
-const rawToTernary = (raw: number[]) => {
-  return [...raw]
-    .map((n) => {
-      return "2" + n.toString(2);
-    })
-    .join("");
+import type { Options, State } from "./common";
+
+const BYTE = 8;
+const THRESH = 64
+const shouldEscape = (i: number) => i >= THRESH;
+
+const toBit3 = ([i, j]: number[], b: string[]) => {
+  const isComma = `${!i | !!j}`;
+  return [`${isComma}`, ...b].join("");
 };
 
-const ternaryToBinary = (tern: string) => {
-  const ternPairs = groupN(tern, 2, "0");
-  return ternPairs
-    .map((t2: string) => {
-      const num = parseInt(t2, 3);
-      return num.toString(2).padStart(3, "0");
-    })
-    .join("");
+const parseBlock = (out: string[], block: string, i: number) => {
+  const last = out.slice(-1)[0] || "";
+  const pack = BYTE - last.length;
+
+  const varBlock = groupN(block.replace(/^0+/, "") || "0", 2, "0");
+  const bits = varBlock.map((b, j) => toBit3([i, j], b)).join("");
+  const next = match(bits.slice(pack), `.{1,${BYTE}}`);
+
+  return out.concat(bits.slice(0, pack), next);
 };
 
-const addPadding = (bin: string) => {
-  const binOrEmpty = bin || "0";
-  return groupN(binOrEmpty, 8, "0").join("");
+const defaultHandler = (state: State, block: string, i: number) => {
+  if (block === "" || i < 0 ) {
+    return {...state, cache: [] };
+  }
+  const out = parseBlock(state.out, block, i);
+  return {...state, out, cache: [] };
+}
+
+const blockHandler = (opts?: Options) => {
+  const { handler } = { handler: defaultHandler, ...opts };
+  return (state: State, block: string, i: number) => {
+    if (order.length && !order.includes(i)) {
+      return handler(state, block, i);
+    }
+    if (state.cache.length > 0) {
+      const newState = handler(state, "", -1);
+      return defaultHandler(newState, block, i);
+    }
+    return defaultHandler(state, block, i);
+  }
+}
+
+const bitsFromBlock = (state: State, block: string, i: number) => {
+  const { handlers: [ handle ] } = state;
+  const { out } = handle(state, block, i);
+  console.log({out, block, i})
+  return { ...state, out }
+}
+
+const bitsFromBlocks = (bits: string[], opts = {}) => {
+  const handlers = [ blockHandler(opts) ];
+  const state = { out: [], cache: [], handlers };
+  const result = bits.reduce(bitsFromBlock, state);
+  return groupN(result.out.join(""), BYTE, "0");
 };
 
-const binaryToIntegers = (bin: string) => {
-  const bytes = groupN(bin, 8, "0");
-  return bytes.map((s: string) => parseInt(s, 2));
+const bitsToCode = (bin: string, opts?: Options) => {
+  const bits = groupN(bin, BYTE, "0");
+  return bitsToInts(bitsFromBlocks(bits, opts));
 };
 
-const encode = (raw: number[]) => {
-  const tern = rawToTernary(raw);
-  const bin = ternaryToBinary(tern);
-  const binPad = addPadding(bin);
-  return binaryToIntegers(binPad);
+const encode = (ints: number[], opts?: Options) => {
+  const bin = bitsFromInts(ints).join("");
+  return bitsToCode(bin, opts);
 };
 
-export { rawToTernary, ternaryToBinary, binaryToIntegers, encode };
+export { bitsFromBlocks, bitsToCode, encode };

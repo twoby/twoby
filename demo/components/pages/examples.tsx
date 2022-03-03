@@ -1,9 +1,8 @@
 import React from "react";
 import styles from "./examples.module.scss";
-import { roundTrip, toUint8 } from "../lib/io";
-import { compareLength, listQuality } from "../lib/quality.ts";
+import { roundTrip, toUint8 } from "../../lib/io";
+import { compareLength, listQuality } from "../../lib/quality.ts";
 import { Link } from "react-router-dom";
-import { NavLinks } from "./navLinks";
 
 // Types
 import type { Props as AllProps } from "../lib/props";
@@ -11,11 +10,9 @@ type Props = Pick<AllProps, "inputs">;
 
 const Examples = (props: Props) => {
   const { inputs } = props;
-  const links = [{ to: "/heat/", text: "View Heatmap" }];
   const qualia = listQuality(styles);
   return (
     <>
-      <NavLinks {...{ links }} />
       <h3>Examples</h3>
       <div className={styles.examples}>
         {inputs.map((list, key) => {

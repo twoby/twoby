@@ -1,0 +1,65 @@
+So, I've measured two things:
+
+## Ratio of log2 entropy in b3b9 "up to n" bits...
+
+- log of total possible / a fixed "n" bits:
+  - e.g. 0,3,4,15 as 000,011,001000,011111 to 000000,000011,000100,001111
+  - This would be log2(1 + 3 + 3*4) / 6 = 4/6 = .666
+  - As in, 4 bits is 66.6% of the max of 6 bits
+
+- log of total possible / an expected "weighted mean" bits:
+  - e.g. 0,3,4,15 as 000,011,001000,011111 to 00000,00011,00100,01111
+  - This would be log2(1 + 3 + 3*4) / (((3)*1 + (3)*3 + (6)*3*4)/(1 + 3 + 3*4)) = 4/5.25 = .762
+  - As in, 4 bits is 76.2% of the mean of 5.25 bits
+
+## Does it mean anything if this goes above 1?
+  - What if we have 1000x 0, 10x 1 to 3 and 1X 4 through 15 ?
+  - This would be log2(1 + 3 + 3*4) / (((3)*1000 + (3)*3 + (6)*3*4)/(1011)) = 4/3.05 = 1.31
+  - So... 4 bits is 31% more than the mean of 3 bits
+
+## Yes!
+  - It means we can use more values than the mean 3.05 bits per value would indicate
+  - We have 8 values ( 8,9,10,11,12,13,14,15 ) that 3-bit ints cannot use
+  - Log2(8 + 8) / Log2(8) = 4/3
+
+How does this relate to my earlier "bits per value" metric?
+  - Well, the "bits per value" is the weighted mean number of bits
+  - Divide the total unique values expressed by the "bits per value"
+    - This gives us the ratio of entropy over fixed weighted mean bits
+
+So, if few unique values are used:
+  - FIXED log2(unique) bits per int
+Else, if many unique values are used:
+  - If there's a fairly even distribution...
+    - FIXED log2(unique) bits per int
+  - If there's a widely varied distribution...
+    - VAR B3B9, with small numbers for common values
+
+## Future Work
+- Practicality of B3B9 preference
+  - Is weaker against FIXED width for n=1,2,3,4,5,6...
+  - Is stronger against FIXED width for n=8,16,32,64
+
+What metrics can compare to n=8,16,32,64?
+- Old metric: (mean bits per value) / n
+- Inverse: (total value count) / total bits
+- We could count the number of wasted bits?
+
+### Total Value Count / Total Bits
+- Uint8 : 1/8
+- Uint16 : 1/16
+- VAR B3B9 Estimate:
+ - (n values) / (n bits)
+ - (n values) / ((n values) * (weighted mean bits))
+ - 1 / (weighted mean bits)
+
+We want this small fraction to be larger (more values per bits)
+ - so we want the "weighted mean bits" to be small.
+
+If m < max(8, 2**ceil(log2(log2(1 + n))))
+ - then B2B9 is better than FIXED byte integer
+   - for n possible values
+   - for m weighted mean bits
+   - or for m = (bit count / value count)
+
+This is more general case of old metric!!

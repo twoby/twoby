@@ -11,17 +11,19 @@ const codes = {
       decode: (v) => v,
       encode: (v) => v,
       name: "Uint8",
-      block: BYTE,
+      padding: BYTE,
+      bits: BYTE,
       radix: 2,
     };
   },
-  get uintVarTern() {
+  get uintVarQuat() {
     return {
       decode: decodeTwoby,
       encode: encodeTwoby,
       name: "Twoby",
-      block: null,
-      radix: 3,
+      padding: 2,
+      radix: 4,
+      bits: 3,
     };
   },
 };

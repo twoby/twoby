@@ -3,7 +3,7 @@ import reactRefresh from "@vitejs/plugin-react-refresh";
 
 export default defineConfig({
   build: {
-    chunkSizeWarningLimit: 1500
+    chunkSizeWarningLimit: 1500,
   },
   plugins: [
     reactRefresh({

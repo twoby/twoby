@@ -8,26 +8,28 @@ type HashOptions = {
   space: string;
 };
 
+const PAGES = {
+  heat: ["reps", "input"],
+  text: ["input"],
+  list: ["input"],
+};
+
 const CONFIG = {
   radix: 10,
   space: ",",
-  content: ["list", "heat"],
+  content: Object.keys(PAGES),
 };
 
-const format = ({ radix, space, content }, p) => {
-  const page = content.includes(p) ? p : content[0];
-  const keys =
-    {
-      heat: ["reps", "input"],
-      list: ["input"],
-    }[page] || [];
+const format = ({ radix, space, content }, page) => {
+  const keys = PAGES[page] || [];
   const inKeys = (k) => keys.includes(k);
   const formats = [
     {
       keys: ["reps"].filter(inKeys),
-      empty: 2,
+      empty: 1,
       decode: (s) => parseInt(s, 10),
       encode: (v) => v.toString(10),
+      checkText: (s) => !isNaN(parseInt(s, 10)),
       checkValue: (v) => v > 1,
     },
     {
@@ -52,11 +54,15 @@ const format = ({ radix, space, content }, p) => {
   return { formats, root };
 };
 
+const usePage = () => {
+  const p = useLocation().pathname.split("/")[1];
+  return CONFIG.content.includes(p) ? p : "text";
+};
+
 const useHash = (options: HashOptions) => {
   const nav = useNavigate();
   const params = useParams();
-  const pathList = useLocation().pathname.split("/");
-  const { formats, root } = format(CONFIG, pathList[1]);
+  const { formats, root } = format(CONFIG, usePage());
   const opts = { ...options, formats, root };
   const hash = useVars(params, opts);
   const setHash = useSetVars(nav, opts);
@@ -66,4 +72,4 @@ const useHash = (options: HashOptions) => {
   return { hash, setHash, updateHash };
 };
 
-export { useHash };
+export { useHash, usePage };

@@ -1,0 +1,35 @@
+From 3 to 33 bytes…
+Alternatives can be modeled by:
+DiscretePlot[2**(2+Floor[Log[Prime[Floor[x/3]+1]]]), {x,3,33}]
+Means can be modeled by:
+DiscretePlot[y=2.74*floor(x/3) + 0.701, {x,3,33}]
+
+Together, plotting only every 3rd:
+DiscretePlot[y=2**(2+Floor[Log[Prime[Floor[x/3]+1]]])*(1-Sign(x mod 3)), y=(2.74*floor(x/3) + 0.701)* (1-Sign(x mod 3)), {x,3,33}]
+https://www.wolframalpha.com/input?i=DiscretePlot%5By%3D2**%282%2BFloor%5BLog%5BPrime%5BFloor%5Bx%2F3%5D%2B1%5D%5D%5D%29*%281-Sign%28x+mod+3%29%29%2C+y%3D%282.74*floor%28x%2F3%29+%2B+0.701%29*+%281-Sign%28x+mod+3%29%29%2C+%7Bx%2C3%2C33%7D%5D
+
+We can see variable length encoding is better for all but 9-bit, 18-bit, and 21-bit
+
+###Conclusions:
+  - better: 3-bit or 6-bit maximum... 
+     - fewer bits per value than uint-8
+     - 3-bits for only 4 values
+     - <=6-bits for only 20 values
+  - worse: 9-bit maximum:
+     - 84 values, ~1 bit more per value than uint-8
+  - better: 12-bit or 15-bit maximum...
+    - fewer bits per value than uint-16
+    - <=12-bits for 420 values
+    - <=15-bits for 1444 values
+  - worse: 18-bit or 21-bit maximum...
+    - 5540 values, ~1 bit more per value than uint-16
+    - 42567 values, ~4 bits more per value than uint-16
+  - better: 24 or 27 or 30 or 32 bit maximum
+    - fewer bits per value than uint-32
+    - <=24 bits for 108103 values
+    - <=27 bits for 370247 values
+    - <=30 bits for 6703315 values
+    - <=33 bits for 10897619 values
+
+##Instead of comparing by maximum number of bits... 
+  - maybe I can compare by number of unique values?

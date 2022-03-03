@@ -4,52 +4,81 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import { groupN } from "./common";
+import {
+  groupN,
+  bitsFromQuat,
+  bitsToQuat,
+  bitsFromInts,
+  bitsToInts,
+} from "./common";
 
-const binaryFromIntegers = (ints: number[]) => {
-  return [...ints]
-    .map((n) => {
-      return n.toString(2).padStart(8, "0");
-    })
-    .join("");
-};
-
-const ternaryLookup = (bin: string) => {
-  return groupN(bin, 3).map((bits: string) => {
-    return parseInt(bits, 2).toString(3).padStart(2, "0");
-  });
-};
-
-const ternaryFromBinary = (bin: string) => {
-  return ternaryLookup(bin).join("");
-};
+import type { Options, State, Pair } from "./common";
 
 const removePadding = (bin: string) => {
-  return bin.slice(bin.indexOf("1"));
+  return bin.slice(bin.indexOf("1")).replace("1", "0");
 };
 
-const rawFromTernary = (tern: string) => {
-  return tern
-    .split("2")
-    .slice(1)
-    .map((bits: string) => {
-      return parseInt(bits, 2);
-    })
-    .filter((n: number) => !isNaN(n));
+const parseQuatPair = (out: string[], pair: Pair) => {
+  const [n0, n1] = [...pair].map((n) => parseInt(n, 4));
+  const [last, ...rest] = [out.pop(), ...out];
+  const prior = last ? [...rest, last] : rest;
+  const next = bitsFromQuat(n1).slice(1);
+
+  if (n0 === 1 && last) {
+    return rest.concat([last + next]);
+  }
+  if (n0 === 0) {
+    return prior.concat([next]);
+  }
+  return prior;
 };
 
-const decode = (ints: number[]) => {
-  const binPad = binaryFromIntegers(ints);
+const quatHandler = (opts?: Options) => {
+  const order = opts?.order || [];
+  const mapper = (i: number) => {
+    return order.includes(i) ? order.indexOf(i) : i;
+  }
+  return (state: State, pair: Pair) => {
+    const int = parseQuatPair(state.out, pair);
+    return {...state, out: mapper(int), cache: [] };
+  }
+}
+
+const bitsFromQuatPair = ( state: State, pair?: Pair ) => {
+  const { cache: [cache = [], ...rest] } = state;
+  const { handlers: [basic, extra] } = state;
+  if (!pair) {
+    return cache.reduce(basic, state);
+  }
+  if (cache.length === 1 && pair[0] === '0') {
+    return [...cache, pair].reduce(basic, state);
+  }
+  if (cache.length === 0 && pair === '00') {
+    return { ...state, cache: [[pair]] };
+  }
+  if (rest.length >= 1) {
+    return extra(state, pair);
+  }
+  return basic(state, pair);
+}
+
+const bitsFromQuatPairs = (quats: Pair[], opts = {}) => {
+  const { handler } = { handler: quatHandler(), ...opts };
+  const handlers = [ quatHandler(opts), handler ];
+  const state = { out: [], cache: [], handlers };
+  const result = quats.reduce(bitsFromQuatPair, state);
+  return bitsFromQuatPair(result).out;
+};
+
+const bitsFromCode = (bin: string, opts?: Options) => {
+  const quats = groupN(bin, 3, "0").map(bitsToQuat);
+  return bitsToInts(bitsFromQuatPairs(quats, opts), opts);
+};
+
+const decode = (ints: number[], opts?: Options) => {
+  const binPad = bitsFromInts(ints).join("");
   const bin = removePadding(binPad);
-  const tern = ternaryFromBinary(bin);
-  return rawFromTernary(tern);
+  return bitsFromCode(bin, opts);
 };
 
-export {
-  binaryFromIntegers,
-  ternaryFromBinary,
-  rawFromTernary,
-  removePadding,
-  ternaryLookup,
-  decode,
-};
+export { bitsFromQuatPairs, bitsFromCode, decode };

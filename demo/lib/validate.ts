@@ -17,20 +17,39 @@ const sameLength = ({ length: l0 }, { length: l1 }) => {
   return !!l0 && !!l1 && l0 === l1;
 };
 
-const validateString = (v, step) => {
-  const { radix, sep } = step;
-  const hexChars = new Map([[16, "a-f0-9"]]).get(radix);
-  const goodChars = hexChars || "0-" + (radix - 1);
-  const badChars = `[^${goodChars}${sep}]`;
-  const badCharsRx = new RegExp(badChars, "g");
-  const badSepRx = new RegExp(`[${sep}]+`, "g");
-  if (v.match(badCharsRx)) {
-    return v.replace(badCharsRx, "");
+const getGoodChars = ({ radix }) => {
+  const specialCases = new Map([
+    [0, ""],
+    [16, "a-f0-9"],
+  ]);
+  if (specialCases.has(radix)) {
+    return specialCases.get(radix);
   }
-  if (v.match(badSepRx)) {
-    return v.replace(badSepRx, sep);
-  }
-  return v;
+  return "0-" + (radix - 1);
 };
 
-export { validateString, checkPadLen, sameLength };
+const replaceAll = (str, pattern, constant) => {
+  return str.replace(new RegExp(pattern, "g"), constant);
+};
+
+const cleanText = (v, step) => {
+  const { sep } = step;
+  const sepRx = `[${sep}]\+?<!$`;
+  const goodChars = getGoodChars(step);
+  const badChars = `[^${goodChars}${sep}]`;
+  const changes = [
+    ...(goodChars ? [[badChars, ""]] : []),
+    ...(sep ? [[sepRx, sep]] : []),
+  ];
+  return changes.reduce((o, [pattern, constant]) => {
+    return replaceAll(o, pattern, constant);
+  }, v);
+};
+
+const checkTextEnd = (v, step) => {
+  const goodChars = getGoodChars(step);
+  const goodEndRx = new RegExp(`[${goodChars}]$`);
+  return !goodChars || v.match(goodEndRx);
+};
+
+export { cleanText, checkTextEnd, checkPadLen, sameLength };

@@ -1,26 +1,26 @@
+import { cleanText, checkTextEnd } from "./validate";
 import { fromBytes } from "./transcode";
-import { validateString, checkPadLen } from "./validate";
 
 const parseEvent = (e) => e.target.value;
 
 const handleText = ({ setInput, setText, options }) => {
   const { textParser } = options.parse;
-  const { decode } = options.code;
   return (e) => {
-    const text = parseEvent(e);
-    const okText = validateString(text, options);
-    const okPadding = checkPadLen(text, options);
-    if (okText !== text || !okPadding) {
-      return setText(okText);
+    const txt = parseEvent(e);
+    const text = cleanText(txt, options);
+    const textOkay = checkTextEnd(text, options);
+    if (!textOkay) {
+      return setText(text);
     }
-    const bits = textParser(options)(text).join("");
-    const result = fromBytes(bits);
+    const { decode } = options.code;
     let decoded;
     try {
+      const bits = textParser(options)(text).join("");
+      const result = fromBytes(bits);
       decoded = decode(result);
     } catch ({ message }) {
       console.warn(message);
-      return setText(okText);
+      return setText(text);
     }
     setInput(decoded);
     setText(null);

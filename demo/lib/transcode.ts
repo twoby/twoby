@@ -1,48 +1,99 @@
-import { binaryFromIntegers, ternaryFromBinary } from "../../src/decode.ts";
-import { binaryToIntegers, ternaryToBinary } from "../../src/encode.ts";
-import { groupN } from "../../src/common.ts";
+import {
+  groupN,
+  bitsToQuat,
+  bitsFromInts,
+  bitsToInts,
+} from "../../src/common.ts";
+import { bitsFromQuatPairs } from "../../src/decode.ts";
+import { encode } from "../../src/encode.ts";
+import { checkPadLen } from "./validate";
+import { englishOrder } from "./order";
 
 const BYTE = 8;
+
+const groupBytes = (s: string) => {
+  return groupN(s, BYTE);
+};
+
+const checkPadding = (text, step) => {
+  const { name } = step.code;
+  const message = `Each item in ${name} must be ${step.padding} chars.`;
+  if (!checkPadLen(text, step)) {
+    throw new Error(message);
+  }
+};
 
 const parsers = {
   uint8: {
     textParser: (step) => {
-      return (text) => toBinary(text, step);
+      return (text) => {
+        checkPadding(text, step);
+        return toBinary(text, step);
+      };
     },
     bitParser: (step) => {
-      return (src) => groupN(src, step.bits);
-    },
-  },
-  uintVarTern: {
-    textParser: ({ sep }) => {
-      return (text) => {
-        const ternPad = text.replaceAll(sep, "");
-        const binPad = ternaryToBinary(ternPad);
-        return groupN(binPad, BYTE);
-      };
-    },
-    bitParser: ({ padding }) => {
       return (src) => {
-        const trits = ternaryFromBinary(src);
-        return groupN(trits, padding).map((v) => {
-          return parseInt(v, 3).toString(2);
-        });
+        return fromBinary(groupN(src, step.bits), step).join(step.sep);
       };
     },
   },
+  uintVarQuat: {
+    textParser: (step) => {
+      return (text) => {
+        checkPadding(text, step);
+        const { sep, code } = step;
+        const { padding, encode } = code;
+        const rawText = text.split(sep).join("");
+        const quats = groupN(rawText, padding);
+        const bits = bitsFromQuatPairs(quats);
+        const decoded = bitsToInts(bits);
+        const result = encode(decoded);
+        return bitsFromInts(result);
+      };
+    },
+    bitParser: (step) => {
+      return (src) => {
+        const { bits } = step.code;
+        const list = groupN(src, bits).map(bitsToQuat);
+        return groupN(list.join(""), step.padding).join(step.sep);
+      };
+    },
+  },
+  englishText: {
+    textParser: (step) => {
+      return (text) => {
+        const { dict } = englishOrder;
+        const result = [...text].map((c) => dict[c]);
+        return bitsFromInts(result);
+      };
+    },
+    bitParser: (step) => {
+      return (src) => {
+        const { sep } = step;
+        const { list } = englishOrder;
+        const ints = bitsToInts(groupN(src, step.bits));
+        const text = ints.map((i) => list[i] || "?").join(sep);
+        return text;
+      };
+    },
+  },
+};
+
+const toPadding = ({ entropy, radix }) => {
+  return Math.ceil(Math.log(entropy) / Math.log(radix));
 };
 
 const toBlockPadding = ({ bits, radix }) => {
-  const entropy = Math.log(2 ** (bits || 8));
-  return Math.ceil(entropy / Math.log(radix));
+  const entropy = 2 ** (bits || 8);
+  return toPadding({ entropy, radix });
 };
 
 const toBytes = (value) => {
-  return binaryFromIntegers(value);
+  return bitsFromInts(value).join("");
 };
 
 const fromBytes = (str) => {
-  return binaryToIntegers(str);
+  return bitsToInts(groupBytes(str));
 };
 
 const toBinary = (str, { radix, bits, sep }) => {
@@ -53,12 +104,9 @@ const toBinary = (str, { radix, bits, sep }) => {
 };
 
 const fromBinary = (bitList, { radix, padding, sep }) => {
-  return bitList
-    .map((s) => {
-      return parseInt(s, 2).toString(radix).padStart(padding, "0");
-    })
-    .join(sep);
+  return bitList.map((s) => {
+    return parseInt(s, 2).toString(radix).padStart(padding, "0");
+  });
 };
 
-export { fromBinary, toBinary, parsers };
-export { fromBytes, toBytes, toBlockPadding };
+export { parsers, fromBytes, toBytes, toBlockPadding };

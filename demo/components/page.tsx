@@ -3,8 +3,9 @@ import { getProps } from "../lib/props";
 import { createGlobalStyle } from "styled-components";
 import styled from "styled-components";
 import Main from "./main";
-import Examples from "./examples";
-import Matrix from "./charts/matrix.tsx";
+import Examples from "./pages/examples";
+import Unicode from "./pages/unicode";
+import Matrix from "./pages/matrix";
 import { useHashHistory } from "use-hash-history";
 import { Routes, Route } from "react-router-dom";
 import { unstable_HistoryRouter as HistoryRouter } from "react-router-dom";
@@ -35,19 +36,21 @@ const Page = (props: Props) => {
   const { hist, inputs } = props;
   const history = useHashHistory(hist);
 
-  const mainProps = { history };
-  const matrixProps = { ...mainProps };
-  const main = <Main {...mainProps} />;
+  const baseProps = { history };
+  const mainProps = { ...baseProps, noChoices: false };
+  const matrixProps = { ...baseProps };
+  const unicodeProps = { ...baseProps };
   const examplesProps = { inputs };
-  const examples = <Examples {...examplesProps} />;
+  const main = <Main {...mainProps} />;
   const matrix = <Matrix {...matrixProps} />;
+  const unicode = <Unicode {...unicodeProps} />;
+  const examples = <Examples {...examplesProps} />;
 
-  const twobyLink = <a href="https://github.com/twoby/twoby">Twoby</a>;
+  //const twobyLink = <a href="https://github.com/twoby/twoby">Twoby</a>;
 
   return (
     <HistoryRouter {...{ history }}>
       <MainDiv>
-        <h2>{twobyLink} (two-separated binary)</h2>
         <Routes>
           <Route path="/" element={main}>
             <Route path="heat/:reps/:input" element={matrix} />;
@@ -55,7 +58,9 @@ const Page = (props: Props) => {
             <Route path="heat" element={matrix} />;
             <Route path="list/:input" element={examples} />;
             <Route path="list" element={examples} />;
-            <Route path="" element={examples} />;
+            <Route path="text/:input" element={unicode} />;
+            <Route path="text" element={unicode} />;
+            <Route path="" element={unicode} />;
           </Route>
         </Routes>
       </MainDiv>

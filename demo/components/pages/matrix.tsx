@@ -8,7 +8,6 @@ import { useWindowSize } from "../../hooks/useWindowSize";
 import { useComparison } from "../../hooks/useComparison";
 import { toSpec } from "../../lib/charts/table";
 import { oneStep } from "../../lib/steps";
-import { NavLinks } from "../navLinks";
 import Status from "../status";
 
 import type { Shape } from "../../lib/charts/table";
@@ -60,15 +59,15 @@ const useOnSignal = (setValue) => {
 const useChoose = () => {
   const { hash, updateHash } = useHash();
   const [choice, setChoice] = React.useState(null);
-  const choose =  (reps) => {
+  const choose = (reps) => {
     return (_, choice) => {
       setChoice(choice);
-      const input = chooseInput(choice, reps)
+      const input = chooseInput(choice, reps);
       updateHash({ input, reps });
-    }
-  }
+    };
+  };
   return { hash, choice, choose };
-}
+};
 
 const chooseInput = (v, reps) => {
   const input = [];
@@ -78,7 +77,7 @@ const chooseInput = (v, reps) => {
     }
   }
   return input;
-}
+};
 
 const labelChoice = (choice) => {
   const defaults = { count: 0, x: "X", y: "Y" };
@@ -97,7 +96,7 @@ const Matrix = (props) => {
   const maxShape = useWindowSize();
   const [shape, setShape] = React.useState(maxShape);
   const { cache, updateCache } = useCache(hist);
-  const { hash, choice, choose} = useChoose();
+  const { hash, choice, choose } = useChoose();
   const rootRef = React.useMemo(() => shapeRef(setShape), [maxShape]);
   const spec = React.useMemo(() => {
     return toSpec(scale(shape, 0.8, 0.5), [0, 2]);
@@ -107,7 +106,7 @@ const Matrix = (props) => {
   const data = { ...useComparison(hash), text: [{ nBytes }] };
   const setReps = ([reps]) => {
     choose(reps)("", choice);
-  }
+  };
   const HeatMap = React.useMemo(() => {
     return createClassFromSpec({ spec });
   }, [spec]);
@@ -119,7 +118,9 @@ const Matrix = (props) => {
         label: `Repetitions of "${nXnY}"`,
         uuid: "repetitions",
         setInput: setReps,
-        updateCache,
+        updateCache: (k, v) => {
+          updateCache(k, v);
+        },
         cache,
       }}
     />
@@ -128,7 +129,6 @@ const Matrix = (props) => {
   const footerHeight = shape.height * 2;
   const signalListeners = { click: choose(hash.reps) };
   const heatMap = { data, actions, signalListeners };
-  const links = [{ to: "/list/", text: "View Examples" }];
 
   return (
     <>
@@ -141,7 +141,6 @@ const Matrix = (props) => {
       </Main>
       <Footer height={footerHeight}>
         <div className={styles.row}>
-          <NavLinks {...{ links }} />
           <h3>HeatMap Controls</h3>
           <div>{status}</div>
         </div>

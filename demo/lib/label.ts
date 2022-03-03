@@ -7,12 +7,12 @@ const capFirst = (str) => {
 };
 
 const toSepLabel = ({ sep }) => {
-  const patterns = new Map([[".*2.*", "joined by 2"]]);
+  const patterns = new Map([["^..+.$", (s) => `joined by ${s.slice(1, -1)}`]]);
   const pattern = [...patterns.keys()].find((regex) => {
     return sep?.match(new RegExp(regex));
   });
-  const suffix = patterns.get(pattern) || "";
-  return suffix.split(" ");
+  const fn = patterns.get(pattern) || (() => "");
+  return fn(sep).split(" ");
 };
 
 const toUnitLabel = (choice) => {
@@ -43,10 +43,12 @@ const matchLabel = (o) => {
 const toBase = ({ radix }) => {
   return (
     new Map([
+      [16, "hex"],
       [2, "binary"],
       [3, "ternary"],
+      [4, "base-4"],
       [10, "decimal"],
-      [16, "hex"],
+      [0, "variable"],
     ]).get(radix) || `base-${radix}`
   );
 };
