@@ -12,7 +12,7 @@ import {
   bitsToInts,
 } from "./common";
 
-import type { Options, State, Pair } from "./common";
+import type { State, Pair } from "./common";
 
 const removePadding = (bin: string) => {
   return bin.slice(bin.indexOf("1")).replace("1", "0");
@@ -22,7 +22,7 @@ const parseQuatPair = (out: string[], pair: Pair) => {
   const [n0, n1] = [...pair].map((n) => parseInt(n, 4));
   const [last, ...rest] = [out.pop(), ...out];
   const prior = last ? [...rest, last] : rest;
-  const next = bitsFromQuat(n1).slice(1);
+  const next = bitsFromQuat(''+n1).slice(1);
 
   if (n0 === 1 && last) {
     return rest.concat([last + next]);
@@ -33,20 +33,14 @@ const parseQuatPair = (out: string[], pair: Pair) => {
   return prior;
 };
 
-const quatHandler = (opts?: Options) => {
-  const order = opts?.order || [];
-  const mapper = (i: number) => {
-    return order.includes(i) ? order.indexOf(i) : i;
-  }
-  return (state: State, pair: Pair) => {
-    const int = parseQuatPair(state.out, pair);
-    return {...state, out: mapper(int), cache: [] };
-  }
+const quatHandler = (state: State, pair: Pair) => {
+  const int = parseQuatPair(state.out, pair);
+  return {...state, out: int, cache: [] };
 }
 
 const bitsFromQuatPair = ( state: State, pair?: Pair ) => {
   const { cache: [cache = [], ...rest] } = state;
-  const { handlers: [basic, extra] } = state;
+  const basic = quatHandler;
   if (!pair) {
     return cache.reduce(basic, state);
   }
@@ -57,28 +51,27 @@ const bitsFromQuatPair = ( state: State, pair?: Pair ) => {
     return { ...state, cache: [[pair]] };
   }
   if (rest.length >= 1) {
-    return extra(state, pair);
+    // TODO
+    return basic(state, pair);
   }
   return basic(state, pair);
 }
 
-const bitsFromQuatPairs = (quats: Pair[], opts = {}) => {
-  const { handler } = { handler: quatHandler(), ...opts };
-  const handlers = [ quatHandler(opts), handler ];
-  const state = { out: [], cache: [], handlers };
+const bitsFromQuatPairs = (quats: Pair[]) => {
+  const state = { out: [], cache: [] };
   const result = quats.reduce(bitsFromQuatPair, state);
   return bitsFromQuatPair(result).out;
 };
 
-const bitsFromCode = (bin: string, opts?: Options) => {
+const bitsFromCode = (bin: string) => {
   const quats = groupN(bin, 3, "0").map(bitsToQuat);
-  return bitsToInts(bitsFromQuatPairs(quats, opts), opts);
+  return bitsToInts(bitsFromQuatPairs(quats as Pair[]));
 };
 
-const decode = (ints: number[], opts?: Options) => {
+const decode = (ints: number[]) => {
   const binPad = bitsFromInts(ints).join("");
   const bin = removePadding(binPad);
-  return bitsFromCode(bin, opts);
+  return bitsFromCode(bin);
 };
 
 export { bitsFromQuatPairs, bitsFromCode, decode };

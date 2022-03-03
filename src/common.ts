@@ -12,12 +12,7 @@ export interface Handler {
   (state: State, pair: Pair) : State 
 }
 
-export type Options = {
-  handler?: Handler,
-}
-
 export type State = {
-  handlers: Handler[],
   out: string[],
   cache: Pair[][]
 }

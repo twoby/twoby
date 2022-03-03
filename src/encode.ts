@@ -6,14 +6,14 @@
 
 import { match, groupN, bitsFromInts, bitsToInts } from "./common";
 
-import type { Options, State } from "./common";
+import type { State } from "./common";
 
 const BYTE = 8;
 const THRESH = 64
 const shouldEscape = (i: number) => i >= THRESH;
 
-const toBit3 = ([i, j]: number[], b: string[]) => {
-  const isComma = `${!i | !!j}`;
+const toBit3 = ([i, j]: number[], b: string) => {
+  const isComma = `${+(!i || !!j)}`;
   return [`${isComma}`, ...b].join("");
 };
 
@@ -36,42 +36,33 @@ const defaultHandler = (state: State, block: string, i: number) => {
   return {...state, out, cache: [] };
 }
 
-const blockHandler = (opts?: Options) => {
-  const { handler } = { handler: defaultHandler, ...opts };
-  return (state: State, block: string, i: number) => {
-    if (order.length && !order.includes(i)) {
-      return handler(state, block, i);
-    }
-    if (state.cache.length > 0) {
-      const newState = handler(state, "", -1);
-      return defaultHandler(newState, block, i);
-    }
-    return defaultHandler(state, block, i);
+const blockHandler = (state: State, block: string, i: number) => {
+  if (state.cache.length > 0) {
+    const newState = defaultHandler(state, "", -1);
+    return defaultHandler(newState, block, i);
   }
+  return defaultHandler(state, block, i);
 }
 
 const bitsFromBlock = (state: State, block: string, i: number) => {
-  const { handlers: [ handle ] } = state;
-  const { out } = handle(state, block, i);
-  console.log({out, block, i})
+  const { out } = blockHandler(state, block, i);
   return { ...state, out }
 }
 
-const bitsFromBlocks = (bits: string[], opts = {}) => {
-  const handlers = [ blockHandler(opts) ];
-  const state = { out: [], cache: [], handlers };
+const bitsFromBlocks = (bits: string[]) => {
+  const state = { out: [], cache: [] };
   const result = bits.reduce(bitsFromBlock, state);
   return groupN(result.out.join(""), BYTE, "0");
 };
 
-const bitsToCode = (bin: string, opts?: Options) => {
+const bitsToCode = (bin: string) => {
   const bits = groupN(bin, BYTE, "0");
-  return bitsToInts(bitsFromBlocks(bits, opts));
+  return bitsToInts(bitsFromBlocks(bits));
 };
 
-const encode = (ints: number[], opts?: Options) => {
+const encode = (ints: number[]) => {
   const bin = bitsFromInts(ints).join("");
-  return bitsToCode(bin, opts);
+  return bitsToCode(bin);
 };
 
 export { bitsFromBlocks, bitsToCode, encode };

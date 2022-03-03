@@ -4,8 +4,7 @@ import { encode, decode } from "../src/index.ts";
 
 const R20 = [0, 1, 2, 4, 9, 19];
 const ALT50 = [51, 52, 51, 52, 51, 52, 51, 52, 51];
-//const TESTS = [[], [0], [2, 2, 2], R20, ALT50];
-const TESTS =[];
+const TESTS = [[], [0], [2, 2, 2], R20, ALT50];
 
 const testUint8 = (input) => {
   const in8 = Uint8Array.from(input);
