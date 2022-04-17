@@ -26,15 +26,15 @@ const testUint8 = (input) => {
 };
 
 const bigToString = (input) => {
-  return [...input].map((n) => n.toString())
-}
+  return [...input].map((n) => n.toString());
+};
 
 const testUint64 = (input) => {
   const in64 = BigUint64Array.from(input);
   const twob = BigUint64Array.from(encode(in64));
   const out64 = BigUint64Array.from(decode(twob));
-  const in64s = bigToString(in64)
-  const out64s = bigToString(out64)
+  const in64s = bigToString(in64);
+  const out64s = bigToString(out64);
   assert.equal(in64s, out64s);
 };
 

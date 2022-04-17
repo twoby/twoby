@@ -34,7 +34,7 @@ const replaceAll = (str, pattern, constant) => {
 
 const cleanText = (v, step) => {
   const { sep } = step;
-  const sepRx = `[${sep}]\+?<!$`;
+  const sepRx = `[${sep}]+?<!$`;
   const goodChars = getGoodChars(step);
   const badChars = `[^${goodChars}${sep}]`;
   const changes = [

@@ -32,12 +32,12 @@ const encodeB9 = (bits: string, order: number) => {
 const encodeB3B9 = ({ input, label }: In, order: number) => {
   if (label === "B3") {
     const bits = input.toString(2);
-    return encodeB3(bits, order)
+    return encodeB3(bits, order);
   }
   const inputB9 = input - minB9;
   const inputB9Real = inputB9 > BigInt(0) ? inputB9 : BigInt(0);
   const bits = inputB9.toString(2);
-  return encodeB9(bits, order)
+  return encodeB9(bits, order);
 };
 
 const encodeValue = (input: bigint, i: number) => {

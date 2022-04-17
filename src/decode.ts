@@ -23,10 +23,10 @@ const bitsFromCode = (bin: string) => {
 function decode(ints: number[]): number[];
 function decode(ints: bigint[]): bigint[];
 function decode(ints: Nums): Nums {
-  const useBigInt = isBigList(ints)
+  const useBigInt = isBigList(ints);
   const inputs = useBigInt ? ints : parseIntegers(ints);
   const outs = decodeValues([...inputs]);
-  return useBigInt ? outs: outs.map((n: bigint) => Number(n));
-};
+  return useBigInt ? outs : outs.map((n: bigint) => Number(n));
+}
 
 export { bitsFromQuatPairs, bitsFromCode, decode };

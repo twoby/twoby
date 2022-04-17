@@ -20,16 +20,16 @@ const bitsToCode = (bin: string) => {
   return inputs.map(encodeValue);
 };
 
-function encode (ints: number[]): number[];
-function encode (ints: bigint[]): bigint[];
-function encode (ints: Nums): Nums {
-  const useBigInt = isBigList(ints)
+function encode(ints: number[]): number[];
+function encode(ints: bigint[]): bigint[];
+function encode(ints: Nums): Nums {
+  const useBigInt = isBigList(ints);
   const inputs = useBigInt ? ints : parseIntegers(ints);
   const packed = packValues([...inputs].map(encodeValue));
   if (useBigInt) {
     return bitsToInts(packed, true);
   }
   return bitsToInts(packed, false);
-};
+}
 
 export { bitsFromBlocks, bitsToCode, encode };
