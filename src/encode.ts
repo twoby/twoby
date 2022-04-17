@@ -4,65 +4,32 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import { match, groupN, bitsFromInts, bitsToInts } from "./common";
+import { encodeValue, packValues } from "./b3b9/encode";
+import { isBigList, bitsToInts, parseIntegers } from "./common";
 
-import type { State } from "./common";
-
-const BYTE = 8;
-const THRESH = 64
-const shouldEscape = (i: number) => i >= THRESH;
-
-const toBit3 = ([i, j]: number[], b: string) => {
-  const isComma = `${+(!i || !!j)}`;
-  return [`${isComma}`, ...b].join("");
-};
-
-const parseBlock = (out: string[], block: string, i: number) => {
-  const last = out.slice(-1)[0] || "";
-  const pack = BYTE - last.length;
-
-  const varBlock = groupN(block.replace(/^0+/, "") || "0", 2, "0");
-  const bits = varBlock.map((b, j) => toBit3([i, j], b)).join("");
-  const next = match(bits.slice(pack), `.{1,${BYTE}}`);
-
-  return out.concat(bits.slice(0, pack), next);
-};
-
-const defaultHandler = (state: State, block: string, i: number) => {
-  if (block === "" || i < 0 ) {
-    return {...state, cache: [] };
-  }
-  const out = parseBlock(state.out, block, i);
-  return {...state, out, cache: [] };
-}
-
-const blockHandler = (state: State, block: string, i: number) => {
-  if (state.cache.length > 0) {
-    const newState = defaultHandler(state, "", -1);
-    return defaultHandler(newState, block, i);
-  }
-  return defaultHandler(state, block, i);
-}
-
-const bitsFromBlock = (state: State, block: string, i: number) => {
-  const { out } = blockHandler(state, block, i);
-  return { ...state, out }
-}
+import type { Nums } from "./common";
 
 const bitsFromBlocks = (bits: string[]) => {
-  const state = { out: [], cache: [] };
-  const result = bits.reduce(bitsFromBlock, state);
-  return groupN(result.out.join(""), BYTE, "0");
+  const inputs = bitsToInts(packValues(bits), true);
+  const encoded = inputs.map(encodeValue);
+  return packValues(encoded);
 };
 
 const bitsToCode = (bin: string) => {
-  const bits = groupN(bin, BYTE, "0");
-  return bitsToInts(bitsFromBlocks(bits));
+  const inputs = bitsToInts(packValues([bin]), true);
+  return inputs.map(encodeValue);
 };
 
-const encode = (ints: number[]) => {
-  const bin = bitsFromInts(ints).join("");
-  return bitsToCode(bin);
+function encode (ints: number[]): number[];
+function encode (ints: bigint[]): bigint[];
+function encode (ints: Nums): Nums {
+  const useBigInt = isBigList(ints)
+  const inputs = useBigInt ? ints : parseIntegers(ints);
+  const packed = packValues([...inputs].map(encodeValue));
+  if (useBigInt) {
+    return bitsToInts(packed, true);
+  }
+  return bitsToInts(packed, false);
 };
 
 export { bitsFromBlocks, bitsToCode, encode };

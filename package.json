@@ -1,6 +1,6 @@
 {
   "name": "twoby",
-  "version": "1.0.0-alpha.2",
+  "version": "1.0.0-beta.0",
   "description": "Two-separated binary",
   "license": "MPL-2.0",
   "scripts": {
