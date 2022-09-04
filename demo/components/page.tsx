@@ -16,19 +16,26 @@ import type { Props } from "../lib/props";
 
 const fontColor = "203220";
 const mainColor = "f4f4ff";
-const fontList = ["Tahoma", "Verdana", "sans-serif"];
+const fontList = ["Kreon", "Tahoma", "Verdana", "sans-serif"];
 
 const MainDiv = styled.div`
-  font-family: ${fontList.join(",")};
   grid-template-columns: minmax(66vw, auto);
+  font-family: ${fontList.join(",")};
   justify-content: space-evenly;
   grid-auto-rows: auto;
+  font-size: 1.25em;
   display: grid;
 `;
 const BodyStyle = createGlobalStyle`
   body {
     background-color: #${mainColor};
     color: #${fontColor};
+  }
+  h1,h2,h3,h4,h5,h6,p {
+    margin-block-end: 0.333em; 
+  }
+  p {
+    margin-block-start: 0.666em; 
   }
 `;
 
@@ -37,7 +44,7 @@ const Page = (props: Props) => {
   const history = useHashHistory(hist);
 
   const baseProps = { history };
-  const mainProps = { ...baseProps, noChoices: false };
+  const mainProps = { ...baseProps };
   const matrixProps = { ...baseProps };
   const unicodeProps = { ...baseProps };
   const examplesProps = { inputs };

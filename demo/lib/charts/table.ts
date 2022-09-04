@@ -20,7 +20,7 @@ const SPEC = {
         {
           type: "formula",
           as: "byteText",
-          expr: "datum.nBytes + ' per Uint8'",
+          expr: "datum.nBytes + ' per integer'",
         },
       ],
     },
@@ -29,8 +29,8 @@ const SPEC = {
 
 const XY = {
   axes: [
-    { orient: "top", title: "X", scale: "x" },
-    { orient: "left", title: "Y", scale: "y" },
+    { orient: "top", title: "1st Integer", scale: "x" },
+    { orient: "left", title: "2nd Integer", scale: "y" },
   ],
 };
 

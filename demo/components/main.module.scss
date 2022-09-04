@@ -1,22 +1,7 @@
 @import "grid";
 @import "status.module";
 
-.row,
 .main {
   @include grid;
-}
-
-.main {
-  grid-template-columns: 1fr minmax(auto, 600px) 1fr;
-  justify-content: center;
   grid-auto-rows: auto;
-}
-
-.main .row {
-  grid-template-columns: 1fr;
-  grid-column: 1 / -1;
-}
-
-.main > div:last-child {
-  grid-row: 5 / span 2;
 }

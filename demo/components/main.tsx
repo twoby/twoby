@@ -6,12 +6,10 @@ import { listQuality } from "../lib/quality";
 import { useCache } from "../hooks/useCache";
 import { useHash, usePage } from "../hooks/useHash";
 import { NavLinks } from "./pages/navLinks";
-import Choices from "./choices";
 import Results from "./results";
 
 const Main = (props) => {
   const hist = props.history;
-  const { noChoices = false } = props;
   const { hash, updateHash } = useHash();
   const { cache, setCache, updateCache } = useCache(hist);
   const setInput = (input) => updateHash({ input });
@@ -35,23 +33,13 @@ const Main = (props) => {
     setPad(!pad);
   };
 
-  const noExplore = noChoices;
-  const choiceProps = { pad, qualia, choices, choice, choose, togglePad };
+  const choiceProps = {
+    pad, qualia, choices,
+    choice, choose, togglePad
+  };
   const result = { cls: styles.row, cache, updateCache, setInput };
-  const results = { result, in8, choice, qualia, noExplore };
+  const results = { result, in8, choice, qualia };
   const activePage = usePage();
-  const items = [
-    <Results key={0} {...results} />,
-    noChoices ? "" : <Choices key={1} {...choiceProps} />,
-    <div key={2} className={styles.row}>
-      <Outlet />
-    </div>,
-  ];
-
-  if (activePage === "text") {
-    items.reverse();
-  }
-
   const links = [
     { to: "/list/", text: "Basic Examples" },
     { to: "/text/", text: "Text Encoding" },
@@ -61,7 +49,14 @@ const Main = (props) => {
   return (
     <>
       <NavLinks {...{ links }} />
-      <div className={styles.main}>{items}</div>
+      <div className={styles.main}>
+        <div className={styles.row}>
+          <Outlet />
+        </div>
+        <Results key={0} {...results}/>
+        <div className={styles.row}>
+        </div>
+      </div>
     </>
   );
 };

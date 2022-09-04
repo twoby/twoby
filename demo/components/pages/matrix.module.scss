@@ -1,12 +1,22 @@
 @import "../grid";
+@import "../status.module";
 
 .row {
   @include grid;
-  grid-template-columns: 1fr minmax(auto, 400px) 1fr;
-  grid-template-rows: 1fr;
-  grid-column: 1;
+  grid-template-columns: 1fr 66vw 1fr;
 }
 
 .row > * {
   grid-column: 2;
+}
+
+.examples {
+  justify-content: space-evenly;
+  display: grid;
+  gap: 0.333em;
+}
+
+.examples {
+  grid-template-columns: repeat(3, 6em);
+  grid-auto-rows: auto;
 }

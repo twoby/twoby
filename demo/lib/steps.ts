@@ -11,14 +11,6 @@ const toStep = (choice) => {
   return { options, label, text };
 };
 
-const asCodeBlock = (choice) => {
-  const { bits, code } = choice;
-  const { radix } = code;
-  const realRadix = Math.pow(2 ** code.bits, 1 / code.padding);
-  const padding = toBlockPadding({ radix: realRadix, bits });
-  return toStep({ padding, sep: " ", ...choice, radix });
-};
-
 const asBlock = (choice) => {
   const padding = toBlockPadding(choice);
   return toStep({ padding, sep: " ", ...choice });
@@ -52,23 +44,4 @@ const resultSteps = ({ in8, code8, out8 }) => {
   ];
 };
 
-const exploreSteps = ({ in8, code8, choice }) => {
-  const noCode = codes.uint8;
-  const noParse = parsers.uint8;
-  const code = codes.uintVarQuat;
-  const parse = parsers.uintVarQuat;
-  const coreIn = { parse: noParse, code: noCode, sep: " + ", radix: 4 };
-  const output = [asList({ ...coreIn, name: "Input", src: toBytes(in8) })];
-
-  if (choice !== null) {
-    const coreInner = { parse, code, ...choice };
-    const coreChoice = { parse: noParse, code, ...choice };
-    return output.concat([
-      asCodeBlock({ ...coreInner, name: "Internal", src: toBytes(code8) }),
-      asBlock({ ...coreChoice, src: toBytes(code8) }),
-    ]);
-  }
-  return output;
-};
-
-export { oneStep, unicodeStep, exploreSteps, resultSteps };
+export { oneStep, unicodeStep, resultSteps };

@@ -5,9 +5,13 @@ const listQuality = (obj) => {
   });
 };
 
-const compareLength = (a, b, source) => {
-  const diff = Math.sign(a.length - b.length);
+const compareValue = (a, b, source) => {
+  const diff = Math.sign(a - b);
   return source[diff + 1];
 };
 
-export { listQuality, compareLength };
+const compareLength = (a, b, source) => {
+  return compareValue(a.length, b.length, source);
+};
+
+export { listQuality, compareLength, compareValue };

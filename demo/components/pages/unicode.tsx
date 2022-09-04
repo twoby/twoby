@@ -36,7 +36,7 @@ const Unicode = (props) => {
   };
   return (
     <>
-      <h3>ASCII</h3>
+      <h2>ASCII</h2>
       <div className={styles.examples}>
         <Result {...resultProps} />
       </div>

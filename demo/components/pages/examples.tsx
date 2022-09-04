@@ -13,7 +13,7 @@ const Examples = (props: Props) => {
   const qualia = listQuality(styles);
   return (
     <>
-      <h3>Examples</h3>
+      <h2>Examples</h2>
       <div className={styles.examples}>
         {inputs.map((list, key) => {
           const text = list.join(", ");
