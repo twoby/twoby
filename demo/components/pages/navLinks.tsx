@@ -38,7 +38,7 @@ const NavLinks = (props) => {
           if (link.to.slice(0,6) == "https:") {
             return (
               <Margin key={i}>
-                <a href={link}>{text}</a>
+                <a href={link.to}>{text}</a>
               </Margin>
             );
           }
