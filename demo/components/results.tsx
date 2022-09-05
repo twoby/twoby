@@ -1,6 +1,7 @@
 import React from "react";
 import Result from "./result";
 import { roundTrip } from "../lib/io";
+import { WikiAscii } from "./hyperlinks";
 import { compareLength } from "../lib/quality";
 import { resultSteps } from "../lib/steps";
 import styles from "./results.module.scss";
@@ -25,9 +26,9 @@ const Results = ({ result, in8, choice, qualia }) => {
   return (
     <>
       <h2>Input/Output Bytes</h2>
-      Here, you can play around with the list of encoded values.
-      The "input" hexedecimal bytes will be familiar to any programmer.
-      The "output" bytes result from my 2-bit variable-length encoding.
+      Freely change the list of encoded values.
+      Programers, notice "input" hex pairs are <WikiAscii/> bytes.
+      The 2-bit variable-length encoding yields the "output" bytes.
       {results}
     </>
   );

@@ -17,7 +17,7 @@ const Examples = (props: Props) => {
       <h2>Numerical Encoding</h2>
       <p>
       Instead of storing numbers as 8 bits, my <WikiVarLen/>
-      uses as few 2-bit blocks as possible. Each block has
+      encoding uses as few 2-bit blocks as possible. Each block has
       a single-bit prefix, so:
       </p>
       <ul>

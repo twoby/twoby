@@ -7,7 +7,7 @@ const wikiAscii = "https://en.wikipedia.org/wiki/ASCII"
 const WikiVarLen = () => {
   return (
     <>
-      {" "}<a href="{wikiVarLen}">variable-length</a>{" "}
+      {" "}<a href={wikiVarLen}>variable-length</a>{" "}
     </>
   );
 }
@@ -15,7 +15,7 @@ const WikiVarLen = () => {
 const WikiFreq = () => {
   return (
     <>
-      {" "}<a href="{wikiVarLen}">frequency&nbsp;analysis</a>{" "}
+      {" "}<a href={wikiFreq}>frequency&nbsp;analysis</a>{" "}
     </>
   );
 }
@@ -23,7 +23,7 @@ const WikiFreq = () => {
 const WikiAscii = () => {
   return (
     <>
-      {" "}<a href="{wikiAscii}">ASCII text</a>{" "}
+      {" "}<a href={wikiAscii}>ASCII text</a>{" "}
     </>
   );
 }

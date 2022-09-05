@@ -37,21 +37,21 @@ const Unicode = (props) => {
   };
   return (
     <>
-      <h2>Saving Space in English Text</h2>
+      <h2>Shrink English Text</h2>
       <p>
-        Thanks to <WikiFreq/>, we know that the few common
-        letters in English occur <em>way more often</em>
-        than the many less common letters.
+        English <WikiFreq/> shows a few common
+        letters occur <em>way more often</em>
+        {" "}than most (less common) letters.
       </p>
       <p>
-        Using this knowledge, I store common letters with
+        So, I store common letters with way
         fewer binary bits than rare letters:
       </p>
       <ul>
-        <li> "e", "t", "a", and whitespace use 3-bits.</li>
-        <li> "o", "n", "i", "s", "r", "h", "l", "d", "c", "u", "m", and "f" use 6-bits.</li>
+        <li> "a", "e", "t", and whitespace use 3-bits.</li>
+        <li> "c", "d", "f", "h", "i", "l"–"o", "r", "s", and "u" each use 6-bits.</li>
         <li> The rest of the lowercase letters (and some capitals) use 9-bits.</li>
-        <li> Some capital letters and symbols need 12-bits. </li>
+        <li> Other capitals, digits, and symbols need 12-bits. </li>
       </ul>
       <p>
         Since normal <WikiAscii/> uses 8-bits, most
