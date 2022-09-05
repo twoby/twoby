@@ -7,7 +7,7 @@
     "lint": "eslint src/* demo/*",
     "build": "rm -rf build && tsc -b",
     "format": "prettier --ignore-path .eslintignore --write .",
-    "pages": "pnpm vite --config vite.config.ts build demo --outDir docs && mv demo/docs .",
+    "pages": "pnpm vite --config vite.config.ts build demo --outDir pages",
     "test": "uvu -r tsm -r esm tests",
     "demo": "vite serve demo --host"
   },

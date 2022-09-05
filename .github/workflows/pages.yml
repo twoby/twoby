@@ -29,6 +29,7 @@ jobs:
           pnpm run pages
       - name: Archive artifact
         run: |
+          cd demo
           tar \
             --dereference --hard-dereference \
             --directory pages \
