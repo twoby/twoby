@@ -46,6 +46,12 @@ const Main = (props) => {
     { to: "/heat/", text: "Trend Chart" },
   ].filter(({ to }) => !to.match(new RegExp("^/" + activePage)));
 
+  const tvLink = { 
+    to: {
+      pathname: "https://tvquizphd.com"
+    },
+    text: "TVQuizPhD.com"
+  };
   return (
     <>
       <NavLinks {...{ links }} />
@@ -57,6 +63,7 @@ const Main = (props) => {
         <div className={styles.row}>
         </div>
       </div>
+      <NavLinks {...{ links: [tvLink] }} />
     </>
   );
 };
