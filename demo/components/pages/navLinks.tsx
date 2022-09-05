@@ -35,6 +35,13 @@ const NavLinks = (props) => {
     <Wrapper>
       <Row n={links.length}>
         {links.map(({ text, ...link }, i) => {
+          if (link.slice(6) == "https:") {
+            return (
+              <Margin key={i}>
+                <a href={link}>{text}</a>
+              </Margin>
+            );
+          }
           return (
             <Margin key={i}>
               <Link {...link}>{text}</Link>
