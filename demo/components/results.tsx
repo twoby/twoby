@@ -26,9 +26,11 @@ const Results = ({ result, in8, choice, qualia }) => {
   return (
     <>
       <h2>Input/Output Bytes</h2>
-      Freely change the list of encoded values.
-      Programers, notice "input" hex pairs are <WikiAscii/> bytes.
-      The 2-bit variable-length encoding yields the "output" bytes.
+      <p>
+        Freely change the list of encoded values.
+        Programers, notice "input" hex pairs are <WikiAscii/> bytes.
+        The 2-bit variable-length encoding yields the "output" bytes.
+      </p>
       {results}
     </>
   );
