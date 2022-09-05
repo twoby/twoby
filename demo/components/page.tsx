@@ -9,7 +9,6 @@ import Matrix from "./pages/matrix";
 import { useHashHistory } from "use-hash-history";
 import { Routes, Route } from "react-router-dom";
 import { unstable_HistoryRouter as HistoryRouter } from "react-router-dom";
-import { Routes, Route } from "react-router-dom";
 
 // Types
 import type { Props } from "../lib/props";
