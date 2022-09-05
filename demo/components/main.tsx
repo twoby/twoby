@@ -47,9 +47,7 @@ const Main = (props) => {
   ].filter(({ to }) => !to.match(new RegExp("^/" + activePage)));
 
   const tvLink = { 
-    to: {
-      pathname: "https://tvquizphd.com"
-    },
+    to: "https://tvquizphd.com",
     text: "TVQuizPhD.com"
   };
   return (
