@@ -133,8 +133,10 @@ const Matrix = (props) => {
         <div>
           <h2>Number of Copies</h2>
           <p>
-          As the pair is repeated more, the encoding uses fewer 
-          bytes even when small numbers pair with {"< 64"}.
+          If large numbers (65 to 255) pair with
+          small numbers ({"<16"}), the trend tends
+          to need 75–95% of typical bytes needed. If
+          most numbers are small, the ratio shrinks.
           </p> 
           <p> 
             <strong>The number of copies of the pair:</strong>
