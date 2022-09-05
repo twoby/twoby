@@ -135,7 +135,7 @@ const Matrix = (props) => {
           <p>
           If large numbers (65 to 255) pair with
           small numbers ({"<16"}), the trend tends
-          to need 75–95% of typical bytes needed. If
+          toward 75–95% of typical bytes used. If
           most numbers are small, the ratio shrinks.
           </p> 
           <p> 
