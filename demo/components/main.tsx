@@ -41,9 +41,9 @@ const Main = (props) => {
   const results = { result, in8, choice, qualia };
   const activePage = usePage();
   const links = [
-    { to: "/list/", text: "Basic Examples" },
-    { to: "/text/", text: "Text Encoding" },
-    { to: "/heat/", text: "Heatmap Graph" },
+    { to: "/list/", text: "Explanation!" },
+    { to: "/text/", text: "English Text" },
+    { to: "/heat/", text: "Trend Chart" },
   ].filter(({ to }) => !to.match(new RegExp("^/" + activePage)));
 
   return (

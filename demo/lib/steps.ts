@@ -38,9 +38,9 @@ const resultSteps = ({ in8, code8, out8 }) => {
   const code = codes.uintVarQuat;
   const core = { parse, code: codes.uint8, bits: 8, radix: 16 };
   return [
+    asList({ ...core, name: "", radix: 10, src: toBytes(out8) }),
     asBlock({ ...core, name: "Input", src: toBytes(in8) }),
     asBlock({ ...core, code, name: "Output", src: toBytes(code8) }),
-    asList({ ...core, name: "", radix: 10, src: toBytes(out8) }),
   ];
 };
 

@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import styles from "./matrix.module.scss";
 import { createClassFromSpec } from "react-vega";
+import { WikiVarLen } from "../hyperlinks";
 import { useHash } from "../../hooks/useHash";
 import { useCache } from "../../hooks/useCache";
 import { useWindowSize } from "../../hooks/useWindowSize";
@@ -22,11 +23,6 @@ const Main = styled.div`
   width: 100%;
 `;
 
-const Controls = styled.div`
-  grid-template-rows: 1fr;
-  display: grid;
-`;
-
 const isElement = (x = {}): x is HTMLElement => {
   return ["Width", "Height"].every((k) => `client${k}` in x);
 };
@@ -35,7 +31,7 @@ const shapeRef = (setShape: (s: Shape) => void) => {
   return (el: unknown) => {
     if (el && isElement(el)) {
       const w = el.clientWidth;
-      setShape({ width: w, height: w });
+      setShape({ width: w, height: w*0.75 });
     }
   };
 };
@@ -71,7 +67,7 @@ const labelChoice = (choice) => {
   const defaults = { count: 0, x: "X", y: "Y" };
   const { count, x, y } = { ...defaults, ...choice };
   const cShort = count.toFixed(2).replace(/0?\.?0*$/, "");
-  const cPrefix = parseFloat(cShort) !== count ? "~" : "";
+  const cPrefix = parseFloat(cShort) !== count ? "≈" : "";
   return {
     nBytes: cShort ? `${cPrefix + cShort} Bytes` : "??? Bytes",
     nXnY: `${x},${y}`,
@@ -125,22 +121,20 @@ const Matrix = (props) => {
     <Main>
       <div className={styles.row}>
         <p>
-        Choose pair of integers from the heatmap to see
-        how 2-bit variable length encoding reduces the
-        bytes needed to encode small integers.
+        Choose a pair of numbers here. Pairs of small
+        numbers need {"< 1"} byte in 2-bit
+        <WikiVarLen/> encoding.
         </p> 
         <div ref={rootRef}>
           <HeatMap {...heatMap} />
         </div>
       </div>
       <div className={styles.row}>
-        <Controls>
+        <div>
           <h2>Number of Copies</h2>
           <p>
-          Here, we test longer text by repeating the chosen x,y pair.
-          Longer blocks of text show a more gradual effect when it
-          comes to deciding whether variable length encoding results
-          in a shorter or a longer encoding of the values.
+          As the pair is repeated more, the encoding uses fewer 
+          bytes even when small numbers pair with {"< 64"}.
           </p> 
           <p> 
             <strong>The number of copies of the pair:</strong>
@@ -155,7 +149,10 @@ const Matrix = (props) => {
               return <div {...divProps}>{reps}</div>;
             })}
           </div>
-        </Controls>
+          <p>
+          Many repeated small values lead to a shorter encoding.
+          </p> 
+        </div>
       </div>
     </Main>
   );

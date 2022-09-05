@@ -3,6 +3,7 @@ import styles from "./unicode.module.scss";
 import { roundTrip } from "../../lib/io";
 import { useCache } from "../../hooks/useCache";
 import { useHash } from "../../hooks/useHash";
+import { WikiFreq, WikiAscii } from "../hyperlinks";
 import { compareLength, listQuality } from "../../lib/quality.ts";
 import { unicodeStep } from "../../lib/steps";
 import Result from "../result";
@@ -36,7 +37,27 @@ const Unicode = (props) => {
   };
   return (
     <>
-      <h2>ASCII</h2>
+      <h2>Saving Space in English Text</h2>
+      <p>
+        Thanks to <WikiFreq/>, we know that the few common
+        letters in English occur <em>way more often</em>
+        than the many less common letters.
+      </p>
+      <p>
+        Using this knowledge, I store common letters with
+        fewer binary bits than rare letters:
+      </p>
+      <ul>
+        <li> "e", "t", "a", and whitespace use 3-bits.</li>
+        <li> "o", "n", "i", "s", "r", "h", "l", "d", "c", "u", "m", and "f" use 6-bits.</li>
+        <li> The rest of the lowercase letters (and some capitals) use 9-bits.</li>
+        <li> Some capital letters and symbols need 12-bits. </li>
+      </ul>
+      <p>
+        Since normal <WikiAscii/> uses 8-bits, most
+        English text needs fewer bytes without any
+        compression.
+      </p>
       <div className={styles.examples}>
         <Result {...resultProps} />
       </div>

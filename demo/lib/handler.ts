@@ -15,6 +15,7 @@ const handleText = ({ setInput, setText, options }) => {
     const { decode } = options.code;
     let decoded;
     try {
+      console.log({text})
       const bits = textParser(options)(text).join("");
       const result = fromBytes(bits);
       decoded = decode(result);

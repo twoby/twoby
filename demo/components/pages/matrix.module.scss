@@ -3,7 +3,7 @@
 
 .row {
   @include grid;
-  grid-template-columns: 1fr 66vw 1fr;
+  grid-template-columns: 1fr minmax(300px, 100%) 1fr;
 }
 
 .row > * {
@@ -17,6 +17,6 @@
 }
 
 .examples {
-  grid-template-columns: repeat(3, 6em);
+  grid-template-columns: repeat(auto-fit, 6em);
   grid-auto-rows: auto;
 }

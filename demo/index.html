@@ -15,8 +15,8 @@
     <div id="index"></div>
     <script type="module">
       import Page from "./components/page";
+      import { createRoot } from "react-dom/client";
       import { getProps } from "./lib/props";
-      import { createRoot } from "react-dom";
       import { createElement } from "react";
 
       const findIndex = (doc) => doc.getElementById("index");

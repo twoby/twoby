@@ -20,17 +20,22 @@ const SPEC = {
         {
           type: "formula",
           as: "byteText",
-          expr: "datum.nBytes + ' per integer'",
+          expr: "datum.nBytes",
         },
       ],
     },
   ],
 };
 
+const AX = {
+  titleFont: "Kreon",
+  titleFontSize: 18
+};
+
 const XY = {
   axes: [
-    { orient: "top", title: "1st Integer", scale: "x" },
-    { orient: "left", title: "2nd Integer", scale: "y" },
+    { ...AX, orient: "top", title: "1st Integer", scale: "x" },
+    { ...AX, orient: "left", title: "2nd Integer", scale: "y"},
   ],
 };
 
@@ -92,6 +97,7 @@ const toSpec = (shape: Shape, domain: Domain) => {
             y: { signal: "height", offset: 24 },
             fill: { value: "black" },
             fontSize: { value: 18 },
+            font: { value: "Kreon" },
             align: { value: "right" },
             text: { field: "byteText" },
           },
@@ -105,7 +111,7 @@ const toSpec = (shape: Shape, domain: Domain) => {
         orient: "bottom",
         direction: "horizontal",
         title: ["Bytes per int"],
-        titleFontSize: 12,
+        titleFontSize: 14,
         titlePadding: 4,
       },
     ],

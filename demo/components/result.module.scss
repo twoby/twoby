@@ -19,10 +19,6 @@
   gap: 0.333em;
 }
 
-.result > div:nth-child(odd) {
-  grid-column-start: 1;
-}
-
-.result > div:last-child {
-  grid-column-end: -1;
+.result > div:first-child {
+  grid-column: 1 / -1;
 }
