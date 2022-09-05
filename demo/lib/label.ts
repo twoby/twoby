@@ -47,8 +47,8 @@ const toBase = ({ radix }) => {
       [2, "binary"],
       [3, "ternary"],
       [4, "base-4"],
-      [10, "decimal"],
-      [0, "variable"],
+      [10, "list of numbers"],
+      [0, " "],
     ]).get(radix) || `base-${radix}`
   );
 };

@@ -24,7 +24,7 @@ const unicodeStep = ({ in8 }) => {
   const code = codes.uint8;
   const parse = parsers.englishText;
   const core = { parse, code, bits: 8, radix: 0, sep: "" };
-  return [asList({ ...core, name: "Text", src: toBytes(in8) })];
+  return [asList({ ...core, name: "ASCII Text Input:", src: toBytes(in8) })];
 };
 
 const oneStep = ({ value }) => {
