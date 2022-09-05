@@ -1,37 +1,66 @@
-const ScrollInto = ({
-  children,
-  selector,
-  style = {},
-  alignToTop = false,
-  className = '',
-  onClick,
-}) => {
+import React from "react";
+import { 
+  useHref, useLinkClickHandler
+} from "react-router-dom";
+
+const Scroll = ({ onClick, selector, ...rest }) => {
   const scrollIntoView = () => {
     const options = {
-      behavior: 'smooth'
+      behavior: 'smooth',
+      inline: 'nearest',
+      block: 'start'
     }
-
-    if (alignToTop) {
-      options.block = 'start'
-      options.inline = 'nearest'
-    }
-
     const el = document.querySelector(selector)
     el.scrollIntoView(options)
   }
-
   const handleClick = (event) => {
-    onClick(event)
-    setTimeout(scrollIntoView, 1e3 / 60)
+    onClick();
+    scrollIntoView();
   }
 
   return (
-    <div style={style} className={className} onClick={handleClick}>
-      {children}
-    </div>
-  )
+    <div
+      {...rest}
+      onClick={handleClick}
+    />
+  );
 }
 
+const ScrollLink = React.forwardRef(
+  function LinkWithRef(
+    { onClick, reloadDocument, replace = false, state, target, to, selector, ...rest },
+    ref
+  ) {
+    let href = useHref(to);
+    let handleLink = useLinkClickHandler(to, { replace, state, target });
+    const scrollIntoView = () => {
+      const options = {
+        behavior: 'smooth',
+        inline: 'nearest',
+        block: 'start'
+      }
+      const el = document.querySelector(selector)
+      el.scrollIntoView(options)
+    }
+    const handleClick = (event) => {
+      if (!event.defaultPrevented && !reloadDocument) {
+        scrollIntoView();
+        handleLink(event);
+      }
+    }
+
+    return (
+      <a
+        {...rest}
+        href={href}
+        onClick={handleClick}
+        ref={ref}
+        target={target}
+      />
+    );
+  }
+)
+
 export {
-  ScrollInto
+  ScrollLink, Scroll
 }

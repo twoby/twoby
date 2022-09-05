@@ -18,7 +18,7 @@ const mainColor = "f4f4ff";
 const fontList = ["Kreon", "Tahoma", "Verdana", "sans-serif"];
 
 const MainDiv = styled.div`
-  grid-template-columns: minmax(66vw, auto);
+  grid-template-columns: minmax(60vw, 600px);
   font-family: ${fontList.join(",")};
   justify-content: space-evenly;
   grid-auto-rows: auto;

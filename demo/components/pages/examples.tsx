@@ -1,10 +1,9 @@
 import React from "react";
 import styles from "./examples.module.scss";
 import { WikiVarLen } from "../hyperlinks";
-import { ScrollInto } from "../scroll";
+import { ScrollLink } from "../scroll";
 import { roundTrip, toUint8 } from "../../lib/io";
 import { compareLength, listQuality } from "../../lib/quality.ts";
-import { Link } from "react-router-dom";
 
 // Types
 import type { Props as AllProps } from "../lib/props";
@@ -34,11 +33,16 @@ const Examples = (props: Props) => {
           const { code8 } = roundTrip(in8);
           const to = "/list/" + list.join(",");
           const { className } = compareLength(in8, code8, qualia);
-          const linkProps = { key, className, to };
+          const linkProps = {
+            to,
+            key,
+            className,
+            selector: "#results"
+          };
           return (
-            <ScrollInto selector="#results">
-              <Link {...linkProps}>[{text}]</Link>
-            </ScrollInto>
+            <ScrollLink {...linkProps}>
+              [{text}]
+            </ScrollLink>
           );
         })}
       </div>

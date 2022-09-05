@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import styles from "./matrix.module.scss";
 import { createClassFromSpec } from "react-vega";
+import { Scroll } from "../scroll";
 import { WikiVarLen } from "../hyperlinks";
 import { useHash } from "../../hooks/useHash";
 import { useCache } from "../../hooks/useCache";
@@ -120,7 +121,7 @@ const Matrix = (props) => {
   return (
     <Main>
       <div className={styles.row}>
-        <p>
+        <p id="matrix">
         Choose a pair of numbers here. Pairs of small
         numbers need {"< 1"} byte in 2-bit
         <WikiVarLen/> encoding.
@@ -130,31 +131,26 @@ const Matrix = (props) => {
         </div>
       </div>
       <div className={styles.row}>
-        <div>
-          <h2>Number of Copies</h2>
-          <p>
-          If large numbers (65 to 255) pair with
-          small numbers ({"<16"}), the trend tends
-          toward 75–95% of typical bytes used. If
-          most numbers are small, the ratio shrinks.
-          </p> 
-          <p> 
-            <strong>The number of copies of the pair:</strong>
-          </p> 
-          <br/>
-          <div className={styles.examples}>
-            {inputs.map((reps, key) => {
-              const q = compareValue(hash.reps, reps, qualia);
-              const { className } = q;
-              const onClick = () => setReps(reps);
-              const divProps = { key, className, onClick };
-              return <div {...divProps}>{reps}</div>;
-            })}
-          </div>
-          <p>
-          Many repeated small values lead to a shorter encoding.
-          </p> 
+        <h2>Number of Copies</h2>
+        <p>
+        If large numbers (65 to 255) pair with
+        small numbers ({"<16"}), the trend tends
+        toward 75–95% of typical bytes used. If
+        most numbers are small, the ratio shrinks.
+        </p> 
+        <div className={styles.examples}>
+          {inputs.map((reps, key) => {
+            const q = compareValue(hash.reps, reps, qualia);
+            const { className } = q;
+            const selector = "#matrix";
+            const onClick = () => setReps(reps);
+            const sProps = { key, className, onClick, selector };
+            return <Scroll {...sProps}>{reps} Copies</Scroll>;
+          })}
         </div>
+        <p>
+        Many repeated small values lead to a shorter encoding.
+        </p> 
       </div>
     </Main>
   );
