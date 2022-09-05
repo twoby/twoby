@@ -16,7 +16,7 @@ const Examples = (props: Props) => {
     <>
       <h2>Numerical Encoding</h2>
       <p>
-      Instead of storing numbers as 8 bits, my <WikiVarLen/>
+      Instead of storing numbers as 8 bits, this <WikiVarLen/>
       encoding uses as few 2-bit blocks as possible. Each block has
       a single-bit prefix, so:
       </p>
@@ -52,8 +52,8 @@ const Examples = (props: Props) => {
        <span {...qualia[2]}>fewer&nbsp;bits</span>{". "}
        Lists with many larger numbers need {" "}
        <span {...qualia[0]}>more&nbsp;bits</span>{". "}
-       Many lists of numbers will be
-       <span {...qualia[1]}>somewhere&nbsp;inbetween</span>{", "}
+       Many lists of numbers will remain the
+       <span {...qualia[1]}>same&nbsp;size</span>{", "}
        with roughly as many bits as standard 8-bit integers.
       </p>
     </>

@@ -1,5 +1,6 @@
 import React from "react";
 import styles from "./unicode.module.scss";
+import { Link } from "react-router-dom";
 import { roundTrip } from "../../lib/io";
 import { useCache } from "../../hooks/useCache";
 import { useHash } from "../../hooks/useHash";
@@ -42,9 +43,8 @@ const Unicode = (props) => {
         English <WikiFreq/> shows a few common
         letters occur <em>way more often</em>
         {" "}than most (less common) letters.
-      </p>
-      <p>
-        So, I store common letters with way
+        With a <Link to="/list/"> two-bit encoding</Link>,
+        it's possible to store common letters with way
         fewer binary bits than rare letters:
       </p>
       <ul>
