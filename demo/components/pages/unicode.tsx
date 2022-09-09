@@ -59,7 +59,7 @@ const Unicode = (props) => {
         compression.
       </p>
       <div className={styles.examples}>
-        <Result {...resultProps} />
+        <Result {...resultProps}/>
       </div>
     </>
   );
