@@ -59,7 +59,7 @@ const cleanText = (v, step) => {
     const s1 = s.slice(2);
     const s0 = s.slice(0, 2);
     return `${o}${sep}${s0}${sep}${s1}`;
-  }, "");
+  }, "").slice(1);
 };
 
 const checkTextEnd = (v, step) => {
