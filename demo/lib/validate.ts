@@ -52,7 +52,8 @@ const cleanText = (v, step) => {
     return clean;
   }
   // Special Decimal cleaning
-  const end = v.match(badChars+"$") ? sep : "";
+  const endChars = `[^${goodChars}]$`;
+  const end = v.match(endChars) ? sep : "";
   return clean.split(sep).reduce((o, s) => {
     const len = s.length;
     if (len == 0) {
