@@ -32,6 +32,10 @@ const replaceAll = (str, pattern, constant) => {
   return str.replace(new RegExp(pattern, "g"), constant);
 };
 
+const changer = (o, [pattern, constant]) => {
+  return replaceAll(o, pattern, constant);
+}
+
 const cleanText = (v, step) => {
   const { sep } = step;
   const sepRx = `[${sep}]+?<!$`;
@@ -41,9 +45,21 @@ const cleanText = (v, step) => {
     ...(goodChars ? [[badChars, ""]] : []),
     ...(sep ? [[sepRx, sep]] : []),
   ];
-  return changes.reduce((o, [pattern, constant]) => {
-    return replaceAll(o, pattern, constant);
-  }, v);
+  const max = 255;
+  const clean = changes.reduce(changer, v);
+  const { radix, padding } = step;
+  if (padding != 0 || radix != 10) {
+    return clean;
+  }
+  // Special Decimal cleaning
+  return clean.split(sep).reduce((o, s) => {
+    if (parseInt(s, radix) <= max) {
+      return `${o}${sep}${s}`;
+    }
+    const s1 = s.slice(2);
+    const s0 = s.slice(0, 2);
+    return `${o}${sep}${s0}${sep}${s1}`;
+  }, "");
 };
 
 const checkTextEnd = (v, step) => {
