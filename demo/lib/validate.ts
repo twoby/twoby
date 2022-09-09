@@ -53,12 +53,21 @@ const cleanText = (v, step) => {
   }
   // Special Decimal cleaning
   return clean.split(sep).reduce((o, s) => {
+    const len = s.length;
+    if (len == 0) {
+      return o;
+    }
     if (parseInt(s, radix) <= max) {
       return `${o}${sep}${s}`;
     }
-    const s1 = s.slice(2);
-    const s0 = s.slice(0, 2);
-    return `${o}${sep}${s0}${sep}${s1}`;
+    const s0 = s.slice(0, len - 1);
+    const s1 = s.slice(len - 1);
+    const s2 = s.slice(0, 2);
+    const s3 = s.slice(2);
+    if (parseInt(s0, radix) <= max) {
+      return `${o}${sep}${s0}${sep}${s1}`;
+    }
+    return `${o}${sep}${s2}${sep}${s3}`;
   }, "").slice(1);
 };
 
