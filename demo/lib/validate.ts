@@ -52,6 +52,7 @@ const cleanText = (v, step) => {
     return clean;
   }
   // Special Decimal cleaning
+  const end = v.match(badChars+"$") ? sep : "";
   return clean.split(sep).reduce((o, s) => {
     const len = s.length;
     if (len == 0) {
@@ -68,7 +69,7 @@ const cleanText = (v, step) => {
       return `${o}${sep}${s0}${sep}${s1}`;
     }
     return `${o}${sep}${s2}${sep}${s3}`;
-  }, "").slice(1);
+  }, "").slice(1) + end;
 };
 
 const checkTextEnd = (v, step) => {
