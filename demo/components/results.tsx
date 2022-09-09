@@ -27,10 +27,11 @@ const Results = (props) => {
   const results = list.map((r) => <Result key={r.prefix} {...r} />);
   let flavorText = "";
   const location = useLocation();
-  if (location.pathname.slice(1,5) == "text") {
+  const path = location.pathname;
+  if (path.length < 2 || path.slice(1,5) == "text") {
     flavorText = (
       <>
-        Programers, notice "input" hex pairs are <WikiAscii/> bytes.
+        {" "}Programers, notice "input" hex pairs are <WikiAscii/> bytes.
       </>
     );
   }
